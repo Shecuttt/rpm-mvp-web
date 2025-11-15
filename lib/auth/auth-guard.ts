@@ -19,7 +19,7 @@ export async function AuthGuard({
     redirect(redirectTo);
   }
 
-  return <>{children}</>;
+  return children;
 }
 
 // Usage example in page:

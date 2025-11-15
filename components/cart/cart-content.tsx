@@ -104,8 +104,10 @@ export default function CartContent({
                 {item.product.name}
               </Link>
               <p className="text-muted-foreground text-sm mt-1">
-                {item.product.category}
+                {item.product.stock} {item.product.stock > 1 ? "items" : "item"}{" "}
+                in stock
               </p>
+
               <p className="text-primary font-bold mt-2">
                 {formatPrice(item.product.price)}
               </p>
