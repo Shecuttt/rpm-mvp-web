@@ -1,29 +1,43 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
+import { Database } from "@/lib/types";
+import Link from "next/link";
+
+type Category = Database["public"]["Tables"]["categories"]["Row"];
 
 interface CategoriesBarProps {
-  categories: string[];
-  selectedCategory: string;
-  onSelect: (category: string) => void;
+  categories: Category[];
+  selectedCategory?: string;
 }
 
-export default function CategoriesBar({
+export default async function CategoriesBar({
   categories,
   selectedCategory,
-  onSelect,
 }: CategoriesBarProps) {
   return (
-    <div className="flex overflow-x-auto gap-2 pb-4 scrollbar-hide">
-      {categories.map((category) => (
-        <Button
-          key={category}
-          variant={selectedCategory === category ? "default" : "outline"}
-          onClick={() => onSelect(category)}
-          className="shrink-0 whitespace-nowrap"
-        >
-          {category}
+    <div className="flex overflow-x-auto gap-2 pb-4">
+      {/* All categories */}
+      <Link href={"/products"}>
+        <Button variant={`${!selectedCategory ? "default" : "outline"}`}>
+          All Products
         </Button>
+      </Link>
+
+      {/* Category buttons */}
+      {categories.map((category) => (
+        <Link
+          key={category.id}
+          href={`/products?category=${encodeURIComponent(category.slug)}`}
+        >
+          <Button
+            key={category.id}
+            variant={`${
+              selectedCategory === category.slug ? "default" : "outline"
+            }`}
+            className="capitalize"
+          >
+            {category.name}
+          </Button>
+        </Link>
       ))}
     </div>
   );

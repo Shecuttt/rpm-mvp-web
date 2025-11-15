@@ -4,24 +4,25 @@ import Image from "next/image";
 
 export default function Footer() {
   return (
-    <footer className="hidden md:block bg-black text-slate-300 mt-8">
+    <footer className="hidden md:block bg-black text-slate-300 mt-8 bottom-0 left-0">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-          <div>
+        <div className="grid grid-cols-1 md:grid-cols-6 gap-8 md:gap-10 mb-8">
+          <div className="md:col-span-3">
             <div className="text-white text-2xl font-bold mb-4 flex">
               <Image
                 src="/rpm-header.png"
                 width={30}
                 height={30}
                 alt="RPM Store"
-                className="invert"
+                className="invert mr-2 w-auto h-auto"
               />
               Store
             </div>
             <p className="text-sm leading-relaxed">
-              Your destination for quality products. We bring you the best
-              selection of fashion, electronics, and lifestyle items at
-              competitive prices.
+              RPM Store adalah platform e-commerce yang menyediakan berbagai
+              produk berkualitas dengan harga terbaik. Kami berkomitmen untuk
+              memberikan pengalaman belanja online yang mudah, aman, dan
+              menyenangkan bagi pelanggan kami.
             </p>
           </div>
 
@@ -30,33 +31,13 @@ export default function Footer() {
             <ul className="space-y-2 text-sm">
               <li>
                 <Link href="#" className="hover:text-white transition-colors">
-                  Free Shipping
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-white transition-colors">
-                  Easy Returns
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-white transition-colors">
-                  Customer Support
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-white transition-colors">
-                  Track Order
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-white transition-colors">
-                  Gift Cards
+                  Coming Soon
                 </Link>
               </li>
             </ul>
           </div>
 
-          <div>
+          <div className="md:col-span-2">
             <h4 className="text-white font-semibold mb-4">Connect With Us</h4>
             <p className="text-sm mb-4">
               Follow us on social media for updates and exclusive offers

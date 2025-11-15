@@ -1,46 +1,37 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
-import { useRouter, usePathname } from "next/navigation";
+import { Input } from "../ui/input";
 
-export default function SearchBar() {
-  const [query, setQuery] = useState("");
+export default function SearchBar({
+  defaultValue = "",
+}: {
+  defaultValue?: string;
+}) {
+  const [query, setQuery] = useState(defaultValue);
   const router = useRouter();
-  const pathname = usePathname();
-  const prevPath = useRef(pathname);
-
-  // Reset query hanya saat halaman berubah
-  useEffect(() => {
-    if (prevPath.current !== pathname) {
-      prevPath.current = pathname;
-      setTimeout(() => setQuery(""), 0);
-    }
-  }, [pathname]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!query.trim()) return;
-    router.push(`/products?search=${encodeURIComponent(query.trim())}`);
+    if (query.trim()) {
+      router.push(`/products?search=${encodeURIComponent(query.trim())}`);
+    } else {
+      router.push("/products");
+    }
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex w-full max-w-md gap-2 sm:max-w-lg md:max-w-xl lg:max-w-2xl mx-auto"
-    >
+    <form onSubmit={handleSubmit} className="relative max-w-md">
       <Input
         type="text"
-        placeholder="Search products..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        className="flex-1 text-sm sm:text-base"
+        placeholder="Search products..."
+        className="pl-10"
       />
-      <Button type="submit" size="icon" variant="default" className="shrink-0">
-        <Search className="h-5 w-5 sm:h-6 sm:w-6" />
-      </Button>
+      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
     </form>
   );
 }

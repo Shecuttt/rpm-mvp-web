@@ -1,171 +1,417 @@
 "use client";
 
-import { useState, useTransition } from "react";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Button } from "@/components/ui/button";
-import { Product } from "@/lib/types";
+import Image from "next/image";
+import { createOrderFromCart, createOrderBuyNow } from "@/lib/action/orders";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { OrderStatusDialog } from "./order-status-dialog";
-import { Spinner } from "../ui/spinner";
-import { useCartStore } from "@/stores/use-cart-store";
+import type { CartItemWithProduct } from "@/lib/action/cart";
+import { Database } from "@/lib/types";
+import { useForm, useWatch } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Card, CardContent } from "../ui/card";
+import { Textarea } from "../ui/textarea";
+import { Input } from "../ui/input";
+import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
+import { Button } from "../ui/button";
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
+import { Label } from "../ui/label";
+import {
+  PAYMENT_METHODS,
+  SHIPPING_METHODS,
+  calculateShippingCost,
+} from "@/lib/config/checkout";
 
-export function CheckoutForm({ product }: { product: Product }) {
-  const [formData, setFormData] = useState({
-    name: "",
-    phone: "",
-    address: "",
-    shipping: "regular",
-    payment: "transfer",
+type Product = Database["public"]["Tables"]["products"]["Row"];
+
+interface CheckoutFormProps {
+  items?: CartItemWithProduct[];
+  buyNowProduct?: { product: Product; quantity: number };
+  defaultAddress: string;
+  defaultPhone: string;
+  mode: "cart" | "buy-now";
+}
+
+const formSchema = z.object({
+  address: z
+    .string()
+    .nonempty("Address is required")
+    .min(10, "Address must be at least 10 characters"),
+  phone: z
+    .string()
+    .nonempty("Phone number is required")
+    .min(10, "Phone number is too short")
+    .max(20, "Phone number is too long")
+    .regex(
+      /^(\+62|62|0)8[1-9][0-9]{6,10}$/,
+      "Invalid Indonesian phone number format"
+    ),
+  paymentMethod: z.string().min(1, "Please select a payment method"),
+  shippingMethod: z.string().min(1, "Please select a shipping method"),
+  notes: z
+    .string()
+    .max(200, "Notes must be less than 200 characters")
+    .optional(),
+});
+
+type FormValues = z.infer<typeof formSchema>;
+
+export default function CheckoutForm({
+  items = [],
+  buyNowProduct,
+  defaultAddress,
+  defaultPhone,
+  mode,
+}: CheckoutFormProps) {
+  const router = useRouter();
+
+  const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      address: defaultAddress || "",
+      phone: defaultPhone || "",
+      paymentMethod: "cod",
+      shippingMethod: "regular",
+      notes: "",
+    },
   });
 
-  const [dialog, setDialog] = useState<{
-    open: boolean;
-    status: "success" | "error";
-  }>({
-    open: false,
-    status: "success",
-  });
+  const { handleSubmit, formState, setValue } = form;
+  const { isSubmitting } = formState;
 
-  const [isPending, startTransition] = useTransition();
-
-  const handleChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+    }).format(price);
   };
 
-  const { clear } = useCartStore();
+  // Calculate totals
+  const subtotal =
+    mode === "cart"
+      ? items.reduce((sum, item) => sum + item.product.price * item.quantity, 0)
+      : (buyNowProduct?.product.price || 0) * (buyNowProduct?.quantity || 0);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  // Watch untuk real-time calculation
+  const watchedPaymentMethod = useWatch({
+    control: form.control,
+    name: "paymentMethod",
+  });
+  const watchedShippingMethod = useWatch({
+    control: form.control,
+    name: "shippingMethod",
+  });
 
-    if (!formData.name || !formData.phone || !formData.address) {
-      toast.error("Please complete all required fields.");
-      return;
-    }
+  // Get selected methods info
+  const selectedPaymentInfo = PAYMENT_METHODS.find(
+    (m) => m.id === watchedPaymentMethod
+  );
+  const selectedShippingInfo = SHIPPING_METHODS.find(
+    (m) => m.id === watchedShippingMethod
+  );
 
-    startTransition(async () => {
-      try {
-        // Simulasi proses kirim order ke backend
-        await new Promise((resolve) => setTimeout(resolve, 2000));
+  const shippingCost = calculateShippingCost(subtotal, watchedShippingMethod);
+  const total = subtotal + shippingCost;
 
-        // Jika berhasil
-        setDialog({ open: true, status: "success" });
-        clear();
+  async function onSubmit(values: FormValues) {
+    try {
+      const orderData = {
+        shippingAddress: values.address,
+        phone: values.phone,
+        paymentMethod: values.paymentMethod,
+        shippingMethod: values.shippingMethod,
+        notes: values.notes?.trim() || undefined,
+      };
 
-        // TODO (next): kosongkan cart pakai useCartStore().clearCart()
-      } catch (error) {
-        setDialog({ open: true, status: "error" });
+      let result;
+
+      if (mode === "cart") {
+        result = await createOrderFromCart(orderData);
+      } else if (buyNowProduct) {
+        result = await createOrderBuyNow(
+          buyNowProduct.product.id,
+          buyNowProduct.quantity,
+          orderData
+        );
       }
-    });
-  };
+
+      if (result?.success) {
+        router.push(`/checkout/success?orderId=${result.orderId}`);
+      } else {
+        toast.error(result?.error || "Failed to create order");
+      }
+    } catch (err) {
+      toast.error("Something went wrong", { description: String(err) });
+    }
+  }
 
   return (
-    <>
-      <form
-        onSubmit={handleSubmit}
-        className="space-y-8 bg-white border rounded-lg p-6 shadow-sm"
-      >
-        {/* Address Information */}
-        <section className="space-y-4">
-          <h2 className="text-lg font-semibold text-slate-900">
-            Shipping Information
-          </h2>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="name">Full Name</Label>
-              <Input
-                id="name"
-                placeholder="Your full name"
-                value={formData.name}
-                onChange={(e) => handleChange("name", e.target.value)}
-                required
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="phone">Phone Number</Label>
-              <Input
-                id="phone"
-                placeholder="08xxxxxxxxxx"
-                value={formData.phone}
-                onChange={(e) => handleChange("phone", e.target.value)}
-                required
-              />
-            </div>
-            <div className="sm:col-span-2 flex flex-col gap-2">
-              <Label htmlFor="address">Address</Label>
-              <Input
-                id="address"
-                placeholder="Street, City, Postal Code"
-                value={formData.address}
-                onChange={(e) => handleChange("address", e.target.value)}
-                required
-              />
-            </div>
-          </div>
-        </section>
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+      <div className="grid lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-2 space-y-6">
+          {/* Shipping Info */}
+          <Card>
+            <CardContent className="p-6 space-y-4">
+              <h2 className="text-xl font-bold">Shipping Information</h2>
 
-        {/* Shipping Method */}
-        <section className="space-y-4">
-          <h2 className="text-lg font-semibold text-slate-900">
-            Shipping Method
-          </h2>
-          <RadioGroup
-            value={formData.shipping}
-            onValueChange={(value) => handleChange("shipping", value)}
-          >
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="regular" id="regular" />
-              <Label htmlFor="regular" className="flex flex-col">
-                <span>Regular (3–5 days)</span>
-                <span className="text-sm text-slate-500">Rp10.000</span>
-              </Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="express" id="express" />
-              <Label htmlFor="express" className="flex flex-col">
-                <span>Express (1–2 days)</span>
-                <span className="text-sm text-slate-500">Rp20.000</span>
-              </Label>
-            </div>
-          </RadioGroup>
-        </section>
+              <FieldGroup>
+                <Field>
+                  <FieldLabel>Phone Number *</FieldLabel>
+                  <Input
+                    type="tel"
+                    placeholder="08123456789"
+                    {...form.register("phone")}
+                  />
+                  <FieldError>{formState.errors.phone?.message}</FieldError>
+                </Field>
+              </FieldGroup>
 
-        {/* Payment Method */}
-        <section className="space-y-4">
-          <h2 className="text-lg font-semibold text-slate-900">
-            Payment Method
-          </h2>
-          <RadioGroup
-            value={formData.payment}
-            onValueChange={(value) => handleChange("payment", value)}
-          >
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="transfer" id="transfer" />
-              <Label htmlFor="transfer">Bank Transfer (BCA / Mandiri)</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="cod" id="cod" />
-              <Label htmlFor="cod">Cash on Delivery</Label>
-            </div>
-          </RadioGroup>
-        </section>
+              <FieldGroup>
+                <Field>
+                  <FieldLabel>Shipping Address *</FieldLabel>
+                  <Textarea
+                    placeholder="Jl. Contoh No. 123, Jakarta"
+                    rows={3}
+                    {...form.register("address")}
+                  />
+                  <FieldError>{formState.errors.address?.message}</FieldError>
+                </Field>
+              </FieldGroup>
 
-        {/* Submit */}
-        <div className="pt-4 border-t">
-          <Button type="submit" className="w-full" disabled={isPending}>
-            {isPending && <Spinner />}
-            {isPending ? "Processing..." : "Confirm Order"}
-          </Button>
+              <FieldGroup>
+                <Field>
+                  <FieldLabel>Order Notes (Optional)</FieldLabel>
+                  <Textarea
+                    placeholder="Any special instructions?"
+                    rows={2}
+                    {...form.register("notes")}
+                  />
+                  <FieldError>{formState.errors.notes?.message}</FieldError>
+                </Field>
+              </FieldGroup>
+            </CardContent>
+          </Card>
+
+          {/* Shipping Method */}
+          <Card>
+            <CardContent className="p-6">
+              <h2 className="text-xl font-bold mb-4">Shipping Method</h2>
+
+              <FieldGroup>
+                <Field>
+                  <RadioGroup
+                    value={watchedShippingMethod}
+                    onValueChange={(value) => {
+                      setValue("shippingMethod", value);
+                    }}
+                    className="space-y-3"
+                  >
+                    {SHIPPING_METHODS.map((method) => {
+                      const cost = calculateShippingCost(subtotal, method.id);
+                      return (
+                        <Label
+                          key={method.id}
+                          htmlFor={method.id}
+                          className={`flex items-center gap-4 p-4 border-2 rounded-lg cursor-pointer transition-colors ${
+                            watchedShippingMethod === method.id
+                              ? "border-primary bg-primary/5"
+                              : "border-gray-200 hover:border-gray-300"
+                          }`}
+                        >
+                          <RadioGroupItem value={method.id} id={method.id} />
+                          <span className="text-2xl">{method.icon}</span>
+                          <div className="flex-1">
+                            <div className="font-semibold">{method.name}</div>
+                            <div className="text-sm text-muted-foreground">
+                              {method.description}
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className="font-bold">
+                              {cost === 0 ? "FREE" : formatPrice(cost)}
+                            </div>
+                            <div className="text-xs text-muted-foreground">
+                              {method.estimatedDays}
+                            </div>
+                          </div>
+                        </Label>
+                      );
+                    })}
+                  </RadioGroup>
+                  <FieldError>
+                    {formState.errors.shippingMethod?.message}
+                  </FieldError>
+                </Field>
+              </FieldGroup>
+            </CardContent>
+          </Card>
+
+          {/* Payment Method */}
+          <Card>
+            <CardContent className="p-6">
+              <h2 className="text-xl font-bold mb-4">Payment Method</h2>
+
+              <FieldGroup>
+                <Field>
+                  <RadioGroup
+                    value={watchedPaymentMethod}
+                    onValueChange={(value) => setValue("paymentMethod", value)}
+                    className="space-y-3"
+                  >
+                    {PAYMENT_METHODS.filter((m) => m.enabled).map((method) => (
+                      <Label
+                        key={method.id}
+                        htmlFor={method.id}
+                        className={`flex items-center gap-4 p-4 border-2 rounded-lg cursor-pointer transition-colors ${
+                          watchedPaymentMethod === method.id
+                            ? "border-primary bg-primary/5"
+                            : "border-gray-200 hover:border-gray-300"
+                        }`}
+                      >
+                        <RadioGroupItem value={method.id} id={method.id} />
+                        <span className="text-2xl">{method.icon}</span>
+                        <div className="flex-1">
+                          <div className="font-semibold">{method.name}</div>
+                          <div className="text-sm text-muted-foreground">
+                            {method.description}
+                          </div>
+                        </div>
+                      </Label>
+                    ))}
+                  </RadioGroup>
+                  <FieldError>
+                    {formState.errors.paymentMethod?.message}
+                  </FieldError>
+                </Field>
+              </FieldGroup>
+            </CardContent>
+          </Card>
+
+          {/* Order Items */}
+          <Card>
+            <CardContent className="p-6">
+              <h2 className="text-xl font-bold mb-4">Order Items</h2>
+              <div className="space-y-4">
+                {mode === "cart" &&
+                  items.map((item) => (
+                    <div
+                      key={item.id}
+                      className="flex gap-4 pb-4 border-b last:border-0"
+                    >
+                      <div className="relative w-20 h-20 bg-gray-100 rounded-lg overflow-hidden shrink-0">
+                        <Image
+                          src={item.product.image_url || "/placeholder.png"}
+                          alt={item.product.name}
+                          fill
+                          className="object-cover"
+                          sizes="80px"
+                        />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold truncate">
+                          {item.product.name}
+                        </h3>
+                        <p className="text-sm text-muted-foreground">
+                          {formatPrice(item.product.price)} x {item.quantity}
+                        </p>
+                      </div>
+                      <div className="font-bold shrink-0">
+                        {formatPrice(item.product.price * item.quantity)}
+                      </div>
+                    </div>
+                  ))}
+
+                {mode === "buy-now" && buyNowProduct && (
+                  <div className="flex gap-4">
+                    <div className="relative w-20 h-20 bg-gray-100 rounded-lg overflow-hidden shrink-0">
+                      <Image
+                        src={
+                          buyNowProduct.product.image_url || "/placeholder.png"
+                        }
+                        alt={buyNowProduct.product.name}
+                        fill
+                        className="object-cover"
+                        sizes="80px"
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold truncate">
+                        {buyNowProduct.product.name}
+                      </h3>
+                      <p className="text-sm text-muted-foreground">
+                        {formatPrice(buyNowProduct.product.price)} x{" "}
+                        {buyNowProduct.quantity}
+                      </p>
+                    </div>
+                    <div className="font-bold shrink-0">
+                      {formatPrice(
+                        buyNowProduct.product.price * buyNowProduct.quantity
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
         </div>
-      </form>
 
-      {/* Reusable Dialog */}
-      <OrderStatusDialog
-        open={dialog.open}
-        onClose={() => setDialog((prev) => ({ ...prev, open: false }))}
-        status={dialog.status}
-      />
-    </>
+        {/* Order Summary */}
+        <div className="lg:col-span-1">
+          <Card className="sticky top-4">
+            <CardContent className="p-6 space-y-4">
+              <h2 className="text-xl font-bold">Order Summary</h2>
+
+              <div className="space-y-3 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Subtotal</span>
+                  <span className="font-medium">{formatPrice(subtotal)}</span>
+                </div>
+
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Shipping</span>
+                  <span className="font-medium">
+                    {shippingCost === 0 ? "FREE" : formatPrice(shippingCost)}
+                  </span>
+                </div>
+
+                {selectedShippingInfo && (
+                  <p className="text-xs text-muted-foreground">
+                    {selectedShippingInfo.name} -{" "}
+                    {selectedShippingInfo.estimatedDays}
+                  </p>
+                )}
+
+                <div className="border-t pt-3 flex justify-between">
+                  <span className="font-bold text-lg">Total</span>
+                  <span className="font-bold text-lg text-primary">
+                    {formatPrice(total)}
+                  </span>
+                </div>
+
+                {selectedPaymentInfo && (
+                  <p className="text-xs text-muted-foreground">
+                    Payment: {selectedPaymentInfo.name}
+                  </p>
+                )}
+              </div>
+
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full"
+                size="lg"
+              >
+                {isSubmitting ? "Processing..." : "Place Order"}
+              </Button>
+
+              <p className="text-xs text-muted-foreground text-center">
+                By placing an order, you agree to our terms and conditions
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </form>
   );
 }

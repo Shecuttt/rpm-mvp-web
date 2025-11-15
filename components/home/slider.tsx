@@ -22,7 +22,7 @@ export default function Slider() {
       <CarouselContent>
         {banner.map((item) => (
           <CarouselItem key={item.id}>
-            <div className="flex items-center justify-center w-11/12 max-w-full mx-auto h-48 md:h-72 lg:h-96 overflow-hidden rounded-md">
+            <div className="flex items-center justify-center w-full px-4 md:px-8 mx-auto h-48 md:h-72 lg:h-96 overflow-hidden">
               <Image
                 src={item.image}
                 alt={item.alt}

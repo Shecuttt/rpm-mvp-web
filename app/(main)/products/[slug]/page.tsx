@@ -1,9 +1,8 @@
 import { notFound } from "next/navigation";
-import productsData from "@/data/products.json";
-import type { Product } from "@/lib/types";
 import ProductDetail from "@/components/products/slug/product-detail";
+import { getProductBySlug, getRelatedProducts } from "@/lib/action/products";
 
-const products: Product[] = productsData;
+// generate dynamic metadata here
 
 export default async function ProductDetailPage({
   params,
@@ -11,13 +10,14 @@ export default async function ProductDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const product = products.find((p) => p.slug === slug);
+  const product = await getProductBySlug(slug);
 
   if (!product) notFound();
 
-  const relatedProducts = products
-    .filter((p) => p.category === product.category && p.id !== product.id)
-    .slice(0, 4);
+  // Fetch related products by category
+  const relatedProducts = product.category_id
+    ? await getRelatedProducts(product.category_id, product.id, 4)
+    : [];
 
   return <ProductDetail product={product} relatedProducts={relatedProducts} />;
 }

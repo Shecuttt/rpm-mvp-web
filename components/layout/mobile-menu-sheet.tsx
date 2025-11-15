@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import {
   Sheet,
@@ -11,6 +9,7 @@ import {
 } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { createClient } from "@/utils/supabase/server";
 
 export default function MobileMenuSheet() {
   return (
@@ -36,10 +35,11 @@ export default function MobileMenuSheet() {
           >
             Products
           </Link>
+          <OrderAndAccountButton />
         </nav>
         <SheetFooter>
           <div
-            className="mt-auto
+            className="mt-auto mx-auto
           "
           >
             <p className="text-xs">
@@ -49,5 +49,25 @@ export default function MobileMenuSheet() {
         </SheetFooter>
       </SheetContent>
     </Sheet>
+  );
+}
+
+async function OrderAndAccountButton() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  return (
+    user && (
+      <>
+        <Link href="/orders" className="hover:text-primary transition-colors">
+          Orders
+        </Link>
+        <Link href="/account" className="hover:text-primary transition-colors">
+          Account
+        </Link>
+      </>
+    )
   );
 }
