@@ -26,7 +26,9 @@ export default async function OrdersPage() {
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">
       <div className="max-w-6xl mx-auto mt-12 md:mt-0">
-        <h1 className="text-3xl font-bold mb-8">My Orders</h1>
+        <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-8">
+          My Orders
+        </h1>
         <Suspense fallback={<OrderListSkeleton />}>
           <OrderList orders={orders} />
         </Suspense>

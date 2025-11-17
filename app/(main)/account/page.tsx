@@ -23,7 +23,9 @@ export default async function AccountPage() {
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">
       <div className="max-w-4xl mx-auto mt-12 md:mt-0 space-y-4">
-        <h1 className="text-3xl font-bold mb-8">Akun Saya</h1>
+        <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-8">
+          Akun Saya
+        </h1>
         <UserInfo />
         <div className="w-full flex justify-center">
           <LogoutButton />

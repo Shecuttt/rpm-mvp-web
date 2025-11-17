@@ -26,7 +26,7 @@ export default function FeaturedList({ products }: { products: Product[] }) {
       {products.map((product) => (
         <div
           key={product.id}
-          className="group relative overflow-hidden hover:shadow transition-all duration-300 p-0"
+          className="group relative overflow-hidden bg-white shadow transition-all duration-300 p-0"
         >
           <Link
             href={`/products/${product.slug}`}
@@ -51,7 +51,7 @@ export default function FeaturedList({ products }: { products: Product[] }) {
             </div>
 
             <div className="p-4 space-y-3 right-0 bottom-0 w-full">
-              <h3 className="font-semibold line-clamp-2 mb-2 capitalize">
+              <h3 className="text-sm md:text-base font-semibold line-clamp-2 mb-2 capitalize">
                 {product.name}
               </h3>
               <p className="text-sm text-slate-800">

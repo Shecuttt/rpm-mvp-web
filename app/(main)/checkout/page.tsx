@@ -35,7 +35,9 @@ export default async function CheckoutPage() {
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">
       <div className="max-w-4xl mx-auto mt-12 md:mt-0">
-        <h1 className="text-3xl font-bold mb-8">Checkout</h1>
+        <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-8">
+          Checkout
+        </h1>
         <CheckoutForm
           items={cartItems}
           defaultAddress={profile?.address || ""}

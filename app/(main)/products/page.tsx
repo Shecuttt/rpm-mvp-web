@@ -54,11 +54,14 @@ export default async function ProductsPage({
     <div className="min-h-screen flex flex-col">
       <main className="flex-1">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-16 md:mt-0">
-          <h1 className="text-4xl font-bold text-slate-900 mb-6 capitalize">
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-6">
             {searchQuery
               ? `Search results for "${searchQuery}"`
               : selectedCategory
-              ? `${selectedCategory} Products`
+              ? `${
+                  selectedCategory.charAt(0).toUpperCase() +
+                  selectedCategory.slice(1)
+                } Products`
               : "All Products"}
           </h1>
 
@@ -66,12 +69,15 @@ export default async function ProductsPage({
             <SearchBar defaultValue={searchQuery} />
           </div>
 
-          <div className="mb-8">
-            <CategoriesBar
-              categories={categories}
-              selectedCategory={selectedCategory}
-            />
-          </div>
+          {/* Categories Bar - hidden when searching */}
+          {!searchQuery && (
+            <div className="mb-8">
+              <CategoriesBar
+                categories={categories}
+                selectedCategory={selectedCategory}
+              />
+            </div>
+          )}
 
           <p className="text-slate-600 mb-6">
             Showing {productsData.length} of {totalCount} product

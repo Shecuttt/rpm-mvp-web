@@ -13,6 +13,9 @@ export default async function CategoriesBar({
   categories,
   selectedCategory,
 }: CategoriesBarProps) {
+  const limit = 4; // tampilkan 4 dulu
+  const previewCategories = categories.slice(0, limit);
+  const hasMore = categories.length > limit;
   return (
     <div className="flex overflow-x-auto gap-2 pb-4">
       {/* All categories */}
@@ -23,7 +26,7 @@ export default async function CategoriesBar({
       </Link>
 
       {/* Category buttons */}
-      {categories.map((category) => (
+      {previewCategories.map((category) => (
         <Link
           key={category.id}
           href={`/products?category=${encodeURIComponent(category.slug)}`}
@@ -39,6 +42,13 @@ export default async function CategoriesBar({
           </Button>
         </Link>
       ))}
+
+      {/* More button */}
+      {hasMore && (
+        <Link href="/categories">
+          <Button variant="link">More</Button>
+        </Link>
+      )}
     </div>
   );
 }

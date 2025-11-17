@@ -3,11 +3,11 @@ import { Skeleton } from "../ui/skeleton";
 
 export default function ProductsSkeleton() {
   return (
-    <div className="flex gap-4 w-full h-screen">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
       {[...Array(4)].map((_, index) => (
-        <div key={index} className="w-1/4 flex-col">
-          <Skeleton className="h-2/3 w-full rounded-lg" />
-          <Skeleton className="h-1/3 w-full rounded-lg" />
+        <div key={index} className="flex flex-col gap-4">
+          <Skeleton className="h-40 sm:h-48 lg:h-56 w-full rounded-lg" />
+          <Skeleton className="h-20 sm:h-24 lg:h-28 w-full rounded-lg" />
         </div>
       ))}
     </div>

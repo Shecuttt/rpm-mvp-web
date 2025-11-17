@@ -12,7 +12,9 @@ export default async function FeaturedProducts() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-slate-900">Featured Products</h2>
+        <h2 className="text-xl lg:text-2xl font-bold text-slate-900">
+          Featured Products
+        </h2>
         <Link href="/products">
           <Button className="cursor-pointer" variant={"ghost"}>
             View All <ArrowRightCircle />

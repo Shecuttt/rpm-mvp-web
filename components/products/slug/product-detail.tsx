@@ -196,7 +196,7 @@ export default function ProductDetail({
               <p className="text-sm text-slate-600 text-center">
                 Login dulu buat lanjut.
               </p>
-              <Link href="/login">
+              <Link href={`/login?redirect=${encodeURIComponent(pathname)}`}>
                 <Button className="w-full">Login</Button>
               </Link>
             </div>

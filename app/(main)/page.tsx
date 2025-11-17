@@ -7,7 +7,7 @@ import { Suspense } from "react";
 export default function Home() {
   return (
     <main>
-      <section className="py-2 md:py-4 lg:py-12">
+      <section className="py-12">
         <Slider />
       </section>
       <Suspense fallback={<ProductsSkeleton />}>
