@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { signupSchema, SignupType } from "@/utils/zod/auth-schema";

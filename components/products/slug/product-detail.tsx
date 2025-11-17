@@ -10,6 +10,8 @@ import { RelatedProducts } from "./related-products";
 import BackButton from "@/components/layout/back-button";
 import QuantityDrawer from "./quantity-drawer";
 import Link from "next/link";
+import { useUser } from "@/hooks/useUserClient";
+import { usePathname } from "next/navigation";
 
 type Product = Database["public"]["Tables"]["products"]["Row"] & {
   category?: Database["public"]["Tables"]["categories"]["Row"] | null;
@@ -24,6 +26,8 @@ export default function ProductDetail({
   product,
   relatedProducts,
 }: ProductDetailProps) {
+  const user = useUser();
+  const pathname = usePathname();
   const formatPrice = (price: number) =>
     new Intl.NumberFormat("id-ID", {
       style: "currency",
@@ -119,20 +123,32 @@ export default function ProductDetail({
 
               {/* Add to cart button and buy now button */}
               <div className="hidden md:flex flex-col md:flex-row gap-3 pt-4">
-                {product.stock > 0 ? (
-                  <div className="flex flex-col gap-3 w-full">
-                    <QuantityDrawer product={product} mode="cart" />
-                    <QuantityDrawer product={product} mode="buy" />
-                  </div>
+                {user ? (
+                  product.stock > 0 ? (
+                    <div className="flex flex-col gap-3 w-full">
+                      <QuantityDrawer product={product} mode="cart" />
+                      <QuantityDrawer product={product} mode="buy" />
+                    </div>
+                  ) : (
+                    <Button
+                      disabled
+                      variant="outline"
+                      className="flex-1 w-full"
+                    >
+                      Unavailable
+                    </Button>
+                  )
                 ) : (
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    disabled
-                    className="flex-1 w-full opacity-70 py-3"
-                  >
-                    Unavailable
-                  </Button>
+                  <div className="flex flex-col gap-3 w-full">
+                    <p className="text-sm text-slate-600">
+                      Login dulu buat lanjut.
+                    </p>
+                    <Link
+                      href={`/login?redirect=${encodeURIComponent(pathname)}`}
+                    >
+                      <Button className="w-full">Login</Button>
+                    </Link>
+                  </div>
                 )}
               </div>
 
@@ -161,21 +177,29 @@ export default function ProductDetail({
             <RelatedProducts products={relatedProducts} />
           )}
         </div>
+
+        {/* sticky footer mobile */}
         <footer className="sticky grid grid-cols-2 gap-3 bottom-0 md:hidden p-2 bg-gray-50 border">
-          {product.stock ? (
-            <>
-              <QuantityDrawer product={product} mode="cart" />
-              <QuantityDrawer product={product} mode="buy" />
-            </>
+          {user ? (
+            product.stock ? (
+              <>
+                <QuantityDrawer product={product} mode="cart" />
+                <QuantityDrawer product={product} mode="buy" />
+              </>
+            ) : (
+              <Button disabled variant="outline" className="col-span-2">
+                Unavailable
+              </Button>
+            )
           ) : (
-            <Button
-              size="lg"
-              variant="outline"
-              disabled
-              className="col-span-2 opacity-70 py-3"
-            >
-              Unavailable
-            </Button>
+            <div className="col-span-2 flex flex-col gap-2 p-2">
+              <p className="text-sm text-slate-600 text-center">
+                Login dulu buat lanjut.
+              </p>
+              <Link href="/login">
+                <Button className="w-full">Login</Button>
+              </Link>
+            </div>
           )}
         </footer>
       </main>
