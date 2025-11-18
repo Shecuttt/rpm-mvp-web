@@ -1,6 +1,6 @@
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
-import { getCart } from "@/lib/action/cart";
+import { getSelectedCartItems } from "@/lib/action/cart";
 import CheckoutForm from "@/components/checkout/checkout-form";
 import { Metadata } from "next";
 
@@ -19,7 +19,7 @@ export default async function CheckoutPage() {
     redirect("/login?redirect=/checkout");
   }
 
-  const cartItems = await getCart();
+  const cartItems = await getSelectedCartItems();
 
   if (cartItems.length === 0) {
     redirect("/cart");

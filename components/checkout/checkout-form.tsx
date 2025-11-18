@@ -270,10 +270,12 @@ export default function CheckoutForm({
                         }`}
                       >
                         <RadioGroupItem value={method.id} id={method.id} />
-                        <span className="text-2xl">{method.icon}</span>
+                        <span className="text-lg md:text-xl lg:text-2xl">
+                          {method.icon}
+                        </span>
                         <div className="flex-1">
                           <div className="font-semibold">{method.name}</div>
-                          <div className="text-sm text-muted-foreground">
+                          <div className="text-xs text-muted-foreground">
                             {method.description}
                           </div>
                         </div>
@@ -309,7 +311,7 @@ export default function CheckoutForm({
                         />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold truncate">
+                        <h3 className="font-semibold line-clamp-2">
                           {item.product.name}
                         </h3>
                         <p className="text-sm text-muted-foreground">
