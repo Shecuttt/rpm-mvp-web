@@ -233,13 +233,13 @@ export default function TermsAndConditions() {
                 </p>
                 <div className="bg-gray-50 p-4 rounded-lg space-y-2">
                   <p>
-                    <strong>Email:</strong> support@example.com
+                    <strong>Email:</strong> zaidhusni93@gmail.com
                   </p>
-                  <p>
+                  {/* <p>
                     <strong>Telepon:</strong> +62 21 1234 5678
-                  </p>
+                  </p> */}
                   <p>
-                    <strong>Alamat:</strong> Jl. Contoh No. 123, Jakarta,
+                    <strong>Alamat:</strong> Jl. Jawar No. 54 Wonosobo,
                     Indonesia
                   </p>
                 </div>
