@@ -1,6 +1,5 @@
 import CategoriesBar from "@/components/home/categories-bar";
 import SearchBar from "@/components/home/searchbar";
-import PaginationBar from "@/components/products/pagination-bar";
 import ProductList from "@/components/products/product-list";
 import { getCategories } from "@/lib/action/categories";
 import {
@@ -24,9 +23,6 @@ export default async function ProductsPage({
   const params = await searchParams;
   const selectedCategory = params.category;
   const searchQuery = params.search;
-  const page = Number(params.page || 1);
-  const limit = 12;
-  const offset = (page - 1) * limit;
 
   let productsData, totalCount;
 
@@ -35,15 +31,11 @@ export default async function ProductsPage({
     productsData = result || [];
     totalCount = result?.length || 0;
   } else if (selectedCategory) {
-    const { data, count } = await getProductsByCategory(
-      selectedCategory,
-      limit,
-      offset
-    );
+    const { data, count } = await getProductsByCategory(selectedCategory);
     productsData = data;
     totalCount = count;
   } else {
-    const { data, count } = await getProducts(limit, offset);
+    const { data, count } = await getProducts();
     productsData = data;
     totalCount = count;
   }
@@ -56,13 +48,13 @@ export default async function ProductsPage({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-16 md:mt-0">
           <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-6">
             {searchQuery
-              ? `Search results for "${searchQuery}"`
+              ? `Hasil pencarian untuk "${searchQuery}"`
               : selectedCategory
-              ? `${
+              ? `Produk ${
                   selectedCategory.charAt(0).toUpperCase() +
                   selectedCategory.slice(1)
-                } Products`
-              : "All Products"}
+                }`
+              : "Semua Produk"}
           </h1>
 
           <div className="mb-6">
@@ -79,33 +71,25 @@ export default async function ProductsPage({
             </div>
           )}
 
-          <p className="text-slate-600 mb-6">
-            Showing {productsData.length} of {totalCount} product
-            {totalCount !== 1 ? "s" : ""}
+          <p className="text-muted-foreground mb-6">
+            Menampilkan {productsData.length} dari {totalCount} produk
+            {/* {totalCount !== 1 ? "s" : ""} */}
           </p>
 
           {productsData.length ? (
             <ProductList products={productsData} />
           ) : (
             <div className="text-center py-12 bg-white rounded-lg">
-              <p className="text-gray-500 text-lg">No products found</p>
+              <p className="text-muted-foreground text-lg">Tidak ada produk.</p>
               {(searchQuery || selectedCategory) && (
                 <Link
                   href="/products"
                   className="inline-block mt-4 hover:underline"
                 >
-                  View all products
+                  Lihat Semua
                 </Link>
               )}
             </div>
-          )}
-
-          {totalCount > limit && (
-            <PaginationBar
-              currentPage={page}
-              totalCount={totalCount}
-              limit={limit}
-            />
           )}
         </div>
       </main>

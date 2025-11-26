@@ -17,7 +17,7 @@ export default function Slider() {
         loop: true,
       }}
       plugins={[plugin.current]}
-      className="mt-12 md:mt-0"
+      className="mt-12 md:mt-0 py-12"
     >
       <CarouselContent>
         {banner.map((item) => (

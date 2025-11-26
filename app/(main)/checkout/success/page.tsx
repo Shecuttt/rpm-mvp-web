@@ -19,18 +19,16 @@ export default function SuccessPage() {
           <EmptyMedia>
             <CheckCircle />
           </EmptyMedia>
-          <EmptyTitle>Checkout Success!</EmptyTitle>
-          <EmptyDescription>
-            Your order has been successfully placed.
-          </EmptyDescription>
+          <EmptyTitle>Checkout Berhasil!</EmptyTitle>
+          <EmptyDescription>Pesananmu akan segera diproses.</EmptyDescription>
         </EmptyHeader>
         <EmptyContent>
           <div className="flex gap-4">
             <Link href={"/orders"}>
-              <Button>View Order</Button>
+              <Button>Lihat Order</Button>
             </Link>
             <Link href={"/products"}>
-              <Button>Continue Shopping</Button>
+              <Button>Lanjut Shopping</Button>
             </Link>
           </div>
         </EmptyContent>

@@ -67,7 +67,7 @@ export default function OrderDetail({ order }: { order: OrderWithItems }) {
         <CardContent className="space-y-6">
           <div className="space-y-4">
             <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
-              Items
+              Item
             </h2>
 
             {order.order_items.map((item) => (
@@ -107,7 +107,7 @@ export default function OrderDetail({ order }: { order: OrderWithItems }) {
           <Separator />
 
           <div className="flex justify-between items-center">
-            <p className="text-sm text-muted-foreground">Payment Method</p>
+            <p className="text-sm text-muted-foreground">Metode Pembayaran</p>
             <p className="text-lg font-semibold uppercase">
               {order?.payment_method}
             </p>
@@ -117,7 +117,7 @@ export default function OrderDetail({ order }: { order: OrderWithItems }) {
 
           <div className="flex justify-between items-center">
             <p className="text-sm text-muted-foreground capitalize">
-              Shipping Cost ({order.shipping_method})
+              Metode Pengiriman ({order.shipping_method})
             </p>
             <p className="text-lg font-semibold">{order.shipping_cost}</p>
           </div>

@@ -38,15 +38,15 @@ export default function QuantityDrawer({ product, mode }: QuantityDrawerProps) {
       const result = await addToCart(product.id, quantity);
 
       if (result.success) {
-        toast.success(`${product.name} added to cart!`);
+        toast.success(`${product.name} ditambahkan ke keranjang!`);
         router.refresh();
         setOpen(false);
       } else {
-        toast.error(result.error || "Failed to add to cart");
+        toast.error(result.error || "Gagal menambahkan ke keranjang");
         if (result.error === "Please login first") {
           router.push(`/login?redirect=${encodeURIComponent(pathname)}`);
         } else {
-          toast.error(result.error || "Failed to add to cart");
+          toast.error(result.error || "Gagal menambahkan ke keranjang");
         }
       }
     } else if (mode === "buy") {
@@ -70,12 +70,11 @@ export default function QuantityDrawer({ product, mode }: QuantityDrawerProps) {
         >
           {mode === "cart" ? (
             <>
-              <ShoppingCart className="mr-2 h-5 w-5" />
-              Add to Cart
+              <ShoppingCart className="mr-2 h-5 w-5" />+ Keranjang
             </>
           ) : (
             <>
-              Buy Now
+              Beli Sekarang
               <ArrowRight className="ml-2 h-5 w-5" />
             </>
           )}

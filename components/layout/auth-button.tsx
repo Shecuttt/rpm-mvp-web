@@ -80,12 +80,12 @@ export default async function AuthButton() {
             <DropdownMenuGroup>
               <DropdownMenuItem asChild>
                 <Link href="/account" className="relative">
-                  Account
+                  Akun Saya
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link href="/orders" className="relative">
-                  Orders
+                  Pesanan
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>

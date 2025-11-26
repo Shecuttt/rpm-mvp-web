@@ -27,7 +27,6 @@ export default function PaginationBar({
     const params = new URLSearchParams(searchParams.toString());
     params.set("page", String(page));
     router.push(`${pathname}?${params.toString()}`);
-    router.refresh();
   };
 
   return (
@@ -42,7 +41,7 @@ export default function PaginationBar({
       </Button>
 
       <span className="text-sm text-muted-foreground">
-        Page {currentPage} of {totalPages}
+        Halaman {currentPage} dari {totalPages}
       </span>
 
       <Button

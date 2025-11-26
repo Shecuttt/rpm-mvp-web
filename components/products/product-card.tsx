@@ -25,7 +25,7 @@ export default function ProductCard({ product }: { product: Product }) {
             src={product.image_url || "https://placehold.co/200"}
             alt={product.name}
             fill
-            className="object-cover group-hover:scale-110 transition-transform duration-500"
+            className="object-cover group-hover:scale-105 transition-transform duration-300"
             sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
             unoptimized
           />
@@ -33,7 +33,7 @@ export default function ProductCard({ product }: { product: Product }) {
           {product.stock === 0 && (
             <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
               <span className="text-white text-sm md:text-base font-semibold uppercase tracking-wide">
-                Out of Stock
+                Stok Habis
               </span>
             </div>
           )}
@@ -41,16 +41,14 @@ export default function ProductCard({ product }: { product: Product }) {
 
         <CardFooter className="flex flex-col items-start p-4 space-y-2">
           <div className="flex flex-row justify-between w-full">
-            <h3 className="font-semibold text-slate-900 line-clamp-2">
+            <h3 className="font-semibold text-primary line-clamp-1">
               {product.name}
             </h3>
             {product.stock === 0 && (
-              <Badge variant={"secondary"}>Out of Stock</Badge>
+              <Badge variant={"secondary"}>Stok Habis</Badge>
             )}
           </div>
-          <p className="text-lg font-bold text-slate-900">
-            {formatPrice(product.price)}
-          </p>
+          <p className="text-primary">{formatPrice(product.price)}</p>
         </CardFooter>
       </Card>
     </Link>

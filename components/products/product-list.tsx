@@ -7,7 +7,7 @@ export default function ProductList({ products }: { products: Product[] }) {
   if (!products.length) {
     return (
       <div className="text-center py-12">
-        <p className="text-slate-600 text-lg">No products found.</p>
+        <p className="text-muted-foreground text-lg">Tidak ada produk.</p>
       </div>
     );
   }

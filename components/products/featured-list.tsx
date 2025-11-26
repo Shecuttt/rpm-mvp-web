@@ -1,6 +1,7 @@
 import type { Database } from "@/lib/types";
 import Link from "next/link";
 import Image from "next/image";
+import { Card } from "../ui/card";
 
 type Product = Database["public"]["Tables"]["products"]["Row"];
 
@@ -24,9 +25,9 @@ export default function FeaturedList({ products }: { products: Product[] }) {
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
       {products.map((product) => (
-        <div
+        <Card
           key={product.id}
-          className="group relative overflow-hidden bg-white shadow transition-all duration-300 p-0"
+          className="group relative overflow-hidden transition-all duration-300 p-0"
         >
           <Link
             href={`/products/${product.slug}`}
@@ -37,7 +38,7 @@ export default function FeaturedList({ products }: { products: Product[] }) {
                 src={product.image_url || "https://placehold.co/200"}
                 alt={product.name}
                 fill
-                className="object-cover group-hover:scale-110 transition-transform duration-500"
+                className="object-cover group-hover:scale-105 transition-transform duration-300"
                 sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
               />
 
@@ -59,7 +60,7 @@ export default function FeaturedList({ products }: { products: Product[] }) {
               </p>
             </div>
           </Link>
-        </div>
+        </Card>
       ))}
     </div>
   );

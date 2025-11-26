@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Check, Tag } from "lucide-react";
 import { Database } from "@/lib/types";
@@ -38,13 +37,13 @@ export default function ProductDetail({
   return (
     <div className="min-h-screen flex flex-col">
       <main className="flex-1 mt-12 md:mt-0">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
           <div className="mb-4">
             <BackButton />
           </div>
 
-          {/* Product image */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 mb-12">
+            {/* Product image */}
             <div className="flex items-center justify-center bg-slate-100 rounded-lg overflow-hidden">
               <div className="relative w-full aspect-square">
                 <Image
@@ -54,7 +53,6 @@ export default function ProductDetail({
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"
                   priority
-                  unoptimized
                 />
               </div>
             </div>
@@ -81,7 +79,7 @@ export default function ProductDetail({
                       className="bg-green-50 text-green-700 border-green-200"
                     >
                       <Check className="h-3 w-3 mr-1" />
-                      In Stock
+                      Stok Tersedia
                     </Badge>
                   ) : (
                     <Badge
@@ -92,28 +90,29 @@ export default function ProductDetail({
                     </Badge>
                   )}
                 </div>
-                <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">
+                <h1 className="text-3xl md:text-4xl font-bold text-primary">
                   {product.name}
                 </h1>
               </div>
 
               <div>
-                <p className="text-4xl font-bold text-slate-900 mb-2">
+                <p className="text-3xl md:text-4xl font-bold text-primary mb-2">
                   {formatPrice(product.price)}
                 </p>
                 {product.stock > 0 ? (
                   <p className="text-sm text-slate-600">
-                    {product.stock} item{product.stock > 1 ? "s" : ""} available
+                    {product.stock} item {/* {product.stock > 1 ? "s" : ""} */}
+                    tersedia
                   </p>
                 ) : (
-                  <p className="text-sm text-red-600">Currently unavailable</p>
+                  <p className="text-sm text-red-600">Tidak Tersedia</p>
                 )}
               </div>
 
               {product.description && (
                 <div>
                   <h3 className="text-lg font-semibold text-slate-900 mb-3">
-                    Description
+                    Deskripsi Produk
                   </h3>
                   <p className="text-slate-600 leading-relaxed">
                     {product.description}
@@ -135,7 +134,7 @@ export default function ProductDetail({
                       variant="outline"
                       className="flex-1 w-full"
                     >
-                      Unavailable
+                      Tidak Tersedia
                     </Button>
                   )
                 ) : (
@@ -153,22 +152,22 @@ export default function ProductDetail({
               </div>
 
               {/* Product highlights */}
-              <Card className="bg-blue-50 border-blue-200 p-4">
+              {/* <Card className="bg-blue-50 border-blue-200 p-4">
                 <ul className="space-y-2 text-sm text-slate-700">
                   <li className="flex items-center gap-2">
                     <Check className="h-4 w-4 text-green-600 shrink-0" />
-                    Free shipping on orders over Rp 500.000
+                    Gratis Ongkir di seluruh Indonesia
                   </li>
                   <li className="flex items-center gap-2">
                     <Check className="h-4 w-4 text-green-600 shrink-0" />
-                    30-day easy returns & exchanges
+                    Pengiriman cepat
                   </li>
                   <li className="flex items-center gap-2">
                     <Check className="h-4 w-4 text-green-600 shrink-0" />
-                    1-year warranty on all products
+                    Produk berkualitas
                   </li>
                 </ul>
-              </Card>
+              </Card> */}
             </div>
           </div>
 
@@ -188,7 +187,7 @@ export default function ProductDetail({
               </>
             ) : (
               <Button disabled variant="outline" className="col-span-2">
-                Unavailable
+                Tidak Tersedia
               </Button>
             )
           ) : (

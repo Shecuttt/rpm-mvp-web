@@ -13,10 +13,10 @@ export default async function CategorySection() {
   const hasMore = categories.length > limit;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 bg-gray-50">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl lg:text-2xl font-bold text-slate-900">
-          Shop by Category
+        <h2 className="text-xl lg:text-2xl font-bold text-slate-900 capitalize">
+          Belanja sesuai kategori
         </h2>
       </div>
 
@@ -34,7 +34,7 @@ export default async function CategorySection() {
                   alt={category.name}
                   width={160}
                   height={160}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
 
                 <div className="absolute bottom-0 w-full p-2 bg-linear-to-t from-black/80 via-black/50 to-black/5">

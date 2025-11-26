@@ -1,8 +1,9 @@
 import LoginForm from "@/components/auth/login/login-form";
+import CartSkeleton from "@/components/skeletons/cart-skeleton";
 import { Card, CardFooter, CardTitle } from "@/components/ui/card";
 import { Metadata } from "next";
 import Link from "next/link";
-import React from "react";
+import React, { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Login | RPM - Ragil Putra Mandiri",
@@ -23,7 +24,9 @@ export default async function LoginPage({
         <CardTitle className="text-2xl font-bold text-center capitalize">
           sign in
         </CardTitle>
-        <LoginForm redirectTo={redirectTo} />
+        <Suspense fallback={<CartSkeleton />}>
+          <LoginForm redirectTo={redirectTo} />
+        </Suspense>
         <CardFooter className="text-sm mx-auto text-muted-foreground">
           Don&apos;t have an account?
           <Link

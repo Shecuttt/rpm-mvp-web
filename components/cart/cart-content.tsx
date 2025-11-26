@@ -53,7 +53,7 @@ export default function CartContent({
       );
       router.refresh();
     } else {
-      toast.error(result.error || "Failed to update quantity");
+      toast.error(result.error || "Gagal mengubah jumlah item");
     }
 
     setLoading(null);
@@ -65,10 +65,10 @@ export default function CartContent({
 
     if (result.success) {
       setItems(items.filter((item) => item.id !== cartItemId));
-      toast.success("Item removed from cart");
+      toast.success("Item berhasil dihapus");
       router.refresh();
     } else {
-      toast.error(result.error || "Failed to remove item");
+      toast.error(result.error || "Gagal menghapus item");
     }
 
     setLoading(null);
@@ -106,7 +106,7 @@ export default function CartContent({
           item.id === cartItemId ? { ...item, selected: currentSelected } : item
         )
       );
-      toast.error(result.error || "Failed to update selection");
+      toast.error(result.error || "Gagal mengubah pilihan");
     }
   };
 
@@ -121,33 +121,33 @@ export default function CartContent({
     if (!result.success) {
       // Revert on error
       setItems(initialItems);
-      toast.error(result.error || "Failed to update selection");
+      toast.error(result.error || "Gagal mengubah pilihan");
     }
   };
 
   if (items.length === 0) {
     return (
-      <Card className="p-12 text-center">
-        <p className="text-muted-foreground text-lg mb-4">Your cart is empty</p>
+      <div className="p-12 text-center space-y-4">
+        <p className="text-muted-foreground text-lg">Keranjangnya kosong tuh</p>
         <Link href="/products">
-          <Button size="lg">Start Shopping</Button>
+          <Button size="lg">Mulai Belanja</Button>
         </Link>
-      </Card>
+      </div>
     );
   }
 
   return (
     <div className="grid lg:grid-cols-3 gap-8">
-      <div className="lg:col-span-2 space-y-4 relative">
+      <div className="lg:col-span-2 space-y-4 relative px-4">
         {/* Select All Header */}
         <div className="bg-white rounded-lg shadow-md p-4 flex items-center gap-3">
           <Checkbox checked={allSelected} onCheckedChange={handleToggleAll} />
           <span className="font-medium">
             {allSelected
-              ? "Deselect All"
+              ? "Batalkan pilihan"
               : someSelected
-              ? `${selectedItems.length} of ${items.length} selected`
-              : "Select All"}
+              ? `${selectedItems.length} of ${items.length} terpilih`
+              : "Pilih semua"}
           </span>
         </div>
 
@@ -158,7 +158,7 @@ export default function CartContent({
           return (
             <Card
               key={item.id}
-              className={`flex flex-row gap-2 lg:gap-3 p-4 relative ${
+              className={`flex flex-row gap-2 lg:gap-3 p-2 md:p-4 lg:p-6 relative ${
                 !item.selected ? "opacity-60" : ""
               }`}
             >
@@ -190,7 +190,7 @@ export default function CartContent({
               </div>
 
               {/* Foto */}
-              <div className="relative size-28 shrink-0 bg-muted rounded-lg overflow-hidden">
+              <div className="relative size-20 md:size-24 lg:size-28 shrink-0 bg-muted rounded-lg overflow-hidden">
                 <Image
                   src={item.product.image_url || "/placeholder.png"}
                   alt={item.product.name}
@@ -203,13 +203,13 @@ export default function CartContent({
               <CardContent className="flex-1 flex flex-col px-2 md:px-4 lg:px-6">
                 <Link
                   href={`/products/${item.product.slug || item.product.id}`}
-                  className="font-semibold text-base md:text-lg hover:text-primary transition-colors line-clamp-2"
+                  className="font-semibold text-sm md:text-base hover:text-primary transition-colors line-clamp-2"
                 >
                   {item.product.name}
                 </Link>
 
-                <p className="text-primary text-sm md:text-base mt-auto">
-                  {formatPrice(item.product.price)}
+                <p className="text-muted-foreground mt-auto text-sm md:text-base">
+                  {formatPrice(item.product.price * item.quantity)}
                 </p>
               </CardContent>
 
@@ -262,10 +262,6 @@ export default function CartContent({
                     <Plus className="size-3 md:size-4" />
                   </Button>
                 </div>
-
-                <p className="font-bold text-base md:text-lg">
-                  {formatPrice(item.product.price * item.quantity)}
-                </p>
               </div>
             </Card>
           );
@@ -273,10 +269,10 @@ export default function CartContent({
       </div>
 
       {/* Order Summary */}
-      <div className="lg:col-span-1">
+      <div className="hidden md:block lg:col-span-1">
         <Card className="sticky top-4">
           <CardHeader>
-            <CardTitle>Order Summary</CardTitle>
+            <CardTitle>Ringkasan Pesanan</CardTitle>
           </CardHeader>
 
           <CardContent>
@@ -288,7 +284,7 @@ export default function CartContent({
                 </div>
               ) : (
                 <p className="text-muted-foreground text-center">
-                  No items selected
+                  Tidak ada produk yang dipilih
                 </p>
               )}
             </div>
@@ -312,6 +308,25 @@ export default function CartContent({
           </CardContent>
         </Card>
       </div>
+
+      {/* Order Summary Mobile */}
+      <footer className="sticky bottom-0 left-0 md:hidden bg-accent border-t flex flex-col gap-4 px-4 py-2 z-10">
+        <div className="flex justify-between">
+          <span className="text-muted-foreground">Sub total</span>
+          <span className="font-medium">{formatPrice(subtotal)}</span>
+        </div>
+        <Separator />
+
+        {selectedItems.length > 0 ? (
+          <Button asChild className="w-full mt-4">
+            <Link href={`/checkout`}>{loading ? <Spinner /> : "Checkout"}</Link>
+          </Button>
+        ) : (
+          <Button disabled className="w-full mt-4">
+            Pilih dulu la
+          </Button>
+        )}
+      </footer>
     </div>
   );
 }

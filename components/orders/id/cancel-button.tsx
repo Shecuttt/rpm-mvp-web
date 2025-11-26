@@ -10,6 +10,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { cancelOrder } from "@/lib/action/orders";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -35,7 +36,7 @@ export default function CancelButton({ orderId }: { orderId: string }) {
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button variant={"destructive"} className="cursor-pointer">
-          Cancel Order
+          Batalkan Pesanan
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
@@ -46,9 +47,9 @@ export default function CancelButton({ orderId }: { orderId: string }) {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Batal</AlertDialogCancel>
+          <AlertDialogCancel>Nggak, Batal</AlertDialogCancel>
           <AlertDialogAction onClick={handleCancel}>
-            {loading ? "Membatalkan..." : "Batalin"}
+            {loading ? <Spinner /> : "Iya, Batal"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

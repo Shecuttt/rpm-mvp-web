@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import UserInfo from "@/components/auth/account/user-info";
 import LogoutButton from "@/components/auth/logout-button";
 import { Metadata } from "next";
+import { isAdmin } from "@/lib/auth/admin";
 
 export const metadata: Metadata = {
   title: "Akun Saya | RPM - Ragil Putra Mandiri",
@@ -11,6 +12,7 @@ export const metadata: Metadata = {
 
 export default async function AccountPage() {
   const supabase = await createClient();
+  const userIsAdmin = await isAdmin();
 
   const {
     data: { user },
@@ -18,6 +20,10 @@ export default async function AccountPage() {
 
   if (!user) {
     redirect("/login");
+  }
+
+  if (userIsAdmin) {
+    redirect("/admin");
   }
 
   return (

@@ -5,20 +5,23 @@ import { Database } from "@/lib/types";
 
 type Product = Database["public"]["Tables"]["products"]["Row"];
 
-const PRODUCTS_PER_PAGE = 12;
-const FEATURED_PRODUCTS_PER_PAGE = 4;
-const RELATED_PRODUCTS_PER_PAGE = 4;
-
 // Get all products with pagination
-export async function getProducts(limit = PRODUCTS_PER_PAGE, offset = 0) {
+export async function getProducts() {
   const supabase = await createClient();
 
   const { data, count, error } = await supabase
     .from("product")
-    .select("*", { count: "exact" })
-    .order("created_at", { ascending: false })
-    .range(offset, offset + limit - 1);
-
+    .select(
+      `
+        *,
+        category:categories (
+          name,
+          slug
+        )
+      `,
+      { count: "exact" }
+    )
+    .order("created_at", { ascending: false });
   if (error) {
     console.error("Error fetching products:", error);
     return { data: [], count: 0 };
@@ -28,11 +31,7 @@ export async function getProducts(limit = PRODUCTS_PER_PAGE, offset = 0) {
 }
 
 // Get products by category with pagination
-export async function getProductsByCategory(
-  categorySlug: string,
-  limit = PRODUCTS_PER_PAGE,
-  offset = 0
-) {
+export async function getProductsByCategory(categorySlug: string) {
   const supabase = await createClient();
 
   // Get category first
@@ -46,8 +45,7 @@ export async function getProductsByCategory(
     .from("product")
     .select("*", { count: "exact" })
     .eq("category_id", category?.id)
-    .order("created_at", { ascending: false })
-    .range(offset, offset + limit - 1);
+    .order("created_at", { ascending: false });
 
   if (error) {
     console.error("Error fetching products:", error);
@@ -93,25 +91,6 @@ export async function searchProducts(query: string) {
   return data as Product[];
 }
 
-// Get categories (unique dari products)
-export async function getCategories() {
-  const supabase = await createClient();
-
-  const { data, error } = await supabase
-    .from("product")
-    .select("category")
-    .not("category", "is", null);
-
-  if (error) {
-    console.error("Error fetching categories:", error);
-    return [];
-  }
-
-  // Get unique categories
-  const categories = [...new Set(data.map((item) => item.category))];
-  return categories.filter(Boolean) as string[];
-}
-
 // Get product by slug
 export async function getProductBySlug(slug: string) {
   const supabase = await createClient();
@@ -136,11 +115,7 @@ export async function getProductBySlug(slug: string) {
 }
 
 // Get related products by category (exclude current product)
-export async function getRelatedProducts(
-  category: string,
-  excludeId: string,
-  limit = RELATED_PRODUCTS_PER_PAGE
-) {
+export async function getRelatedProducts(category: string, excludeId: string) {
   const supabase = await createClient();
 
   const { data, error } = await supabase
@@ -152,8 +127,7 @@ export async function getRelatedProducts(
     `
     )
     .eq("category_id", category)
-    .neq("id", excludeId)
-    .limit(limit);
+    .neq("id", excludeId);
 
   if (error) {
     console.error("Error fetching related products:", error);
@@ -164,7 +138,7 @@ export async function getRelatedProducts(
 }
 
 // Get Featured Products To Display on Home Page
-export async function getFeaturedProducts(limit = FEATURED_PRODUCTS_PER_PAGE) {
+export async function getFeaturedProducts() {
   const supabase = await createClient();
 
   const { data, error } = await supabase
@@ -172,8 +146,7 @@ export async function getFeaturedProducts(limit = FEATURED_PRODUCTS_PER_PAGE) {
     .select("*")
     .eq("is_featured", true)
     .gt("stock", 0)
-    .order("created_at", { ascending: false })
-    .limit(limit);
+    .order("created_at", { ascending: false });
 
   if (error) {
     console.error("Error fetching featured products:", error);

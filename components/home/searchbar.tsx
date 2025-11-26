@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Search } from "lucide-react";
 import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 
 export default function SearchBar({
   defaultValue = "",
@@ -23,15 +23,22 @@ export default function SearchBar({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="relative max-w-md">
+    <form
+      onSubmit={handleSubmit}
+      className="relative max-w-md flex items-center"
+    >
       <Input
         type="text"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        placeholder="Search products..."
-        className="pl-10"
+        placeholder="Cari produk..."
       />
-      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+
+      {/* Tombol Search */}
+      <Button type="submit" className="ml-2">
+        {/* <Search className="h-5 w-5 text-gray-600" /> */}
+        Cari
+      </Button>
     </form>
   );
 }

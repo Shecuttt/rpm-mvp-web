@@ -55,9 +55,9 @@ export default function OrderList({ orders }: { orders: OrderWithItems[] }) {
     return (
       <div className="bg-white rounded-lg shadow-md p-12 text-center">
         <Package className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-        <p className="text-gray-500 text-lg mb-4">No orders yet</p>
+        <p className="text-gray-500 text-lg mb-4">Pesanan Kosong</p>
         <Link href="/products">
-          <Button>Shop Now</Button>
+          <Button>Mulai Belanja</Button>
         </Link>
       </div>
     );
@@ -125,7 +125,7 @@ export default function OrderList({ orders }: { orders: OrderWithItems[] }) {
             </ItemGroup>
 
             <ItemFooter className="flex justify-between items-center pt-4 border-t">
-              <span className="text-sm text-gray-600">Total Amount</span>
+              <span className="text-sm text-gray-600">Total</span>
               <span className="font-bold text-lg">
                 {formatPrice(order.total)}
               </span>

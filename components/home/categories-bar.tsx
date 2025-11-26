@@ -13,7 +13,7 @@ export default async function CategoriesBar({
   categories,
   selectedCategory,
 }: CategoriesBarProps) {
-  const limit = 4; // tampilkan 4 dulu
+  const limit = 7;
   const previewCategories = categories.slice(0, limit);
   const hasMore = categories.length > limit;
   return (
@@ -21,7 +21,7 @@ export default async function CategoriesBar({
       {/* All categories */}
       <Link href={"/products"}>
         <Button variant={`${!selectedCategory ? "default" : "outline"}`}>
-          All Products
+          Semua Kategori
         </Button>
       </Link>
 
@@ -46,7 +46,7 @@ export default async function CategoriesBar({
       {/* More button */}
       {hasMore && (
         <Link href="/categories">
-          <Button variant="link">More</Button>
+          <Button variant="link">Lainnya</Button>
         </Link>
       )}
     </div>

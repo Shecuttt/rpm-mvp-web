@@ -1,6 +1,7 @@
 import Link from "next/link";
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetDescription,
   SheetFooter,
@@ -30,16 +31,20 @@ export default function MobileMenuSheet() {
         </VisuallyHidden>
 
         <nav className="flex flex-col h-full space-y-4 mt-8 text-lg font-medium">
-          <Link href="/" className="hover:text-primary transition-colors">
-            Home
-          </Link>
+          <SheetClose asChild>
+            <Link href="/" className="hover:text-primary transition-colors">
+              Beranda
+            </Link>
+          </SheetClose>
 
-          <Link
-            href="/products"
-            className="hover:text-primary transition-colors"
-          >
-            Products
-          </Link>
+          <SheetClose asChild>
+            <Link
+              href="/products"
+              className="hover:text-primary transition-colors"
+            >
+              Produk
+            </Link>
+          </SheetClose>
 
           {/* orders + account section */}
           <OrderAndAccountSection />
@@ -87,9 +92,11 @@ async function OrderAndAccountSection() {
   // if NOT logged in
   if (!user) {
     return (
-      <Link href="/login" className="text-base hover:text-primary mt-auto">
-        Login
-      </Link>
+      <SheetClose asChild>
+        <Link href="/login" className="text-base hover:text-primary mt-auto">
+          Login
+        </Link>
+      </SheetClose>
     );
   }
 
@@ -106,27 +113,33 @@ async function OrderAndAccountSection() {
 
   return (
     <>
-      <Link href="/orders" className="hover:text-primary transition-colors">
-        Orders
-      </Link>
+      <SheetClose asChild>
+        <Link href="/orders" className="hover:text-primary transition-colors">
+          Pesanan
+        </Link>
+      </SheetClose>
 
-      <Link
-        href="/account"
-        className="w-full mt-auto flex items-center gap-3 p-3 rounded-xl bg-slate-100 hover:bg-slate-200 transition"
-      >
-        <Avatar className="h-10 w-10">
-          <AvatarImage src={profile?.avatar_url || ""} alt={name} />
+      <SheetClose asChild>
+        <Link
+          href="/account"
+          className="w-full mt-auto flex items-center gap-3 p-3 rounded-xl bg-slate-100 hover:bg-slate-200 transition"
+        >
+          <Avatar className="h-10 w-10">
+            <AvatarImage src={profile?.avatar_url || ""} alt={name} />
 
-          <AvatarFallback className={getAvatarColor(profile?.id)}>
-            {initials}
-          </AvatarFallback>
-        </Avatar>
+            <AvatarFallback className={getAvatarColor(profile?.id)}>
+              {initials}
+            </AvatarFallback>
+          </Avatar>
 
-        <div className="flex flex-col overflow-hidden">
-          <p className="text-sm font-medium truncate capitalize">{name}</p>
-          {email && <p className="text-xs text-slate-600 truncate">{email}</p>}
-        </div>
-      </Link>
+          <div className="flex flex-col overflow-hidden">
+            <p className="text-sm font-medium truncate capitalize">{name}</p>
+            {email && (
+              <p className="text-xs text-slate-600 truncate">{email}</p>
+            )}
+          </div>
+        </Link>
+      </SheetClose>
     </>
   );
 }

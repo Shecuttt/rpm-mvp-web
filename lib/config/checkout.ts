@@ -12,28 +12,28 @@ export const PAYMENT_METHODS = [
     name: "Bank Transfer",
     description: "Transfer ke rekening BCA, Mandiri, BNI",
     icon: "🏦",
-    enabled: true,
+    enabled: false,
   },
   {
     id: "ewallet_gopay",
     name: "GoPay",
     description: "Bayar pakai GoPay",
     icon: "📱",
-    enabled: true,
+    enabled: false,
   },
   {
     id: "ewallet_ovo",
     name: "OVO",
     description: "Bayar pakai OVO",
     icon: "💳",
-    enabled: true,
+    enabled: false,
   },
   {
     id: "ewallet_dana",
     name: "DANA",
     description: "Bayar pakai DANA",
     icon: "💰",
-    enabled: true,
+    enabled: false,
   },
   {
     id: "credit_card",
@@ -51,7 +51,7 @@ export const SHIPPING_METHODS = [
     name: "Regular Shipping",
     description: "3-5 hari kerja",
     estimatedDays: "3-5",
-    baseCost: 0, // Free for orders >= 500k
+    baseCost: 20000, // Free for orders >= 500k
     minOrder: 500000,
     icon: "📦",
   },

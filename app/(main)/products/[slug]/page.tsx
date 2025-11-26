@@ -16,7 +16,7 @@ export default async function ProductDetailPage({
 
   // Fetch related products by category
   const relatedProducts = product.category_id
-    ? await getRelatedProducts(product.category_id, product.id, 4)
+    ? await getRelatedProducts(product.category_id, product.id)
     : [];
 
   return <ProductDetail product={product} relatedProducts={relatedProducts} />;

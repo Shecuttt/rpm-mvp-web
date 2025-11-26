@@ -21,6 +21,8 @@ import {
   SHIPPING_METHODS,
   calculateShippingCost,
 } from "@/lib/config/checkout";
+import { Spinner } from "../ui/spinner";
+import Link from "next/link";
 
 type Product = Database["public"]["Tables"]["products"]["Row"];
 
@@ -137,12 +139,20 @@ export default function CheckoutForm({
       }
 
       if (result?.success) {
+        toast.success("Order created successfully", {
+          position: "top-center",
+        });
         router.push(`/checkout/success?orderId=${result.orderId}`);
       } else {
-        toast.error(result?.error || "Failed to create order");
+        toast.error(result?.error || "Failed to create order", {
+          position: "top-center",
+        });
       }
     } catch (err) {
-      toast.error("Something went wrong", { description: String(err) });
+      toast.error("Something went wrong", {
+        description: String(err),
+        position: "top-center",
+      });
     }
   }
 
@@ -153,11 +163,11 @@ export default function CheckoutForm({
           {/* Shipping Info */}
           <Card>
             <CardContent className="p-6 space-y-4">
-              <h2 className="text-xl font-bold">Shipping Information</h2>
+              <h2 className="text-xl font-bold">Informasi Pengiriman</h2>
 
               <FieldGroup>
                 <Field>
-                  <FieldLabel>Phone Number *</FieldLabel>
+                  <FieldLabel>Nomor Telepon *</FieldLabel>
                   <Input
                     type="tel"
                     placeholder="08123456789"
@@ -169,7 +179,7 @@ export default function CheckoutForm({
 
               <FieldGroup>
                 <Field>
-                  <FieldLabel>Shipping Address *</FieldLabel>
+                  <FieldLabel>Alamat Pengiriman *</FieldLabel>
                   <Textarea
                     placeholder="Jl. Contoh No. 123, Jakarta"
                     rows={3}
@@ -181,9 +191,9 @@ export default function CheckoutForm({
 
               <FieldGroup>
                 <Field>
-                  <FieldLabel>Order Notes (Optional)</FieldLabel>
+                  <FieldLabel>Catatan (Opsional)</FieldLabel>
                   <Textarea
-                    placeholder="Any special instructions?"
+                    placeholder="Catatan tambahan? Contoh: Kurir pengiriman cepat."
                     rows={2}
                     {...form.register("notes")}
                   />
@@ -196,7 +206,7 @@ export default function CheckoutForm({
           {/* Shipping Method */}
           <Card>
             <CardContent className="p-6">
-              <h2 className="text-xl font-bold mb-4">Shipping Method</h2>
+              <h2 className="text-xl font-bold mb-4">Metode Pengiriman</h2>
 
               <FieldGroup>
                 <Field>
@@ -220,7 +230,6 @@ export default function CheckoutForm({
                           }`}
                         >
                           <RadioGroupItem value={method.id} id={method.id} />
-                          <span className="text-2xl">{method.icon}</span>
                           <div className="flex-1">
                             <div className="font-semibold">{method.name}</div>
                             <div className="text-sm text-muted-foreground">
@@ -250,7 +259,10 @@ export default function CheckoutForm({
           {/* Payment Method */}
           <Card>
             <CardContent className="p-6">
-              <h2 className="text-xl font-bold mb-4">Payment Method</h2>
+              <h2 className="text-xl font-bold">Metode Pembayaran</h2>
+              <p className="text-xs text-muted-foreground mb-4">
+                Sementara COD dulu yah :)
+              </p>
 
               <FieldGroup>
                 <Field>
@@ -270,9 +282,6 @@ export default function CheckoutForm({
                         }`}
                       >
                         <RadioGroupItem value={method.id} id={method.id} />
-                        <span className="text-lg md:text-xl lg:text-2xl">
-                          {method.icon}
-                        </span>
                         <div className="flex-1">
                           <div className="font-semibold">{method.name}</div>
                           <div className="text-xs text-muted-foreground">
@@ -293,7 +302,7 @@ export default function CheckoutForm({
           {/* Order Items */}
           <Card>
             <CardContent className="p-6">
-              <h2 className="text-xl font-bold mb-4">Order Items</h2>
+              <h2 className="text-xl font-bold mb-4">Rincian Pesanan</h2>
               <div className="space-y-4">
                 {mode === "cart" &&
                   items.map((item) => (
@@ -362,7 +371,7 @@ export default function CheckoutForm({
         <div className="lg:col-span-1">
           <Card className="sticky top-4">
             <CardContent className="p-6 space-y-4">
-              <h2 className="text-xl font-bold">Order Summary</h2>
+              <h2 className="text-xl font-bold">Ringkasan Pesanan</h2>
 
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between">
@@ -371,7 +380,7 @@ export default function CheckoutForm({
                 </div>
 
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Shipping</span>
+                  <span className="text-muted-foreground">Pengiriman</span>
                   <span className="font-medium">
                     {shippingCost === 0 ? "FREE" : formatPrice(shippingCost)}
                   </span>
@@ -393,7 +402,7 @@ export default function CheckoutForm({
 
                 {selectedPaymentInfo && (
                   <p className="text-xs text-muted-foreground">
-                    Payment: {selectedPaymentInfo.name}
+                    Pembayaran: {selectedPaymentInfo.name}
                   </p>
                 )}
               </div>
@@ -404,11 +413,18 @@ export default function CheckoutForm({
                 className="w-full"
                 size="lg"
               >
-                {isSubmitting ? "Processing..." : "Place Order"}
+                {isSubmitting ? <Spinner /> : "Pesan Sekarang"}
               </Button>
 
               <p className="text-xs text-muted-foreground text-center">
-                By placing an order, you agree to our terms and conditions
+                Dengan pesan, kamu menyetujui{" "}
+                <Link
+                  href="/terms-and-conditions"
+                  className="underline"
+                  target="_blank"
+                >
+                  Syarat dan Ketentuan
+                </Link>
               </p>
             </CardContent>
           </Card>
