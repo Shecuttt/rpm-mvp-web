@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import {
@@ -36,7 +37,7 @@ export function RevenueChart({ data }: { data: ChartData[] }) {
             <Legend />
             <Line
               type="monotone"
-              dataKey="revenue"
+              dataKey="value"
               stroke="#3b82f6"
               strokeWidth={2}
             />

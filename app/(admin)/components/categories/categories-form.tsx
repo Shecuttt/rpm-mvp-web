@@ -1,79 +1,62 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState } from "react";
-import { useForm, useWatch } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Field,
   FieldError,
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
-import { Card, CardContent } from "@/components/ui/card";
-import { createProduct, updateProduct } from "@/lib/action/admin";
-import { uploadProductImage } from "@/lib/utils/image-upload";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { Database } from "@/lib/types";
-import Image from "next/image";
-import { Upload, X } from "lucide-react";
-import { CurrencyInput } from "../currency-input";
+import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
+import { createCategory, updateCategory } from "@/lib/action/admin";
+import { Database } from "@/lib/types";
+import { uploadCategoryImage } from "@/lib/utils/image-upload";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Upload, X } from "lucide-react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import { useForm, useWatch } from "react-hook-form";
+import { toast } from "sonner";
+import z from "zod";
 
-type Category = Database["public"]["Tables"]["categories"]["Row"];
-type Product = Database["public"]["Tables"]["products"]["Row"];
+type Categories = Database["public"]["Tables"]["categories"]["Row"];
 
 const formSchema = z.object({
-  name: z.string().min(3, "Name must be at least 3 characters"),
-  slug: z.string().min(3, "Slug must be at least 3 characters"),
-  description: z.string().min(10, "Description must be at least 10 characters"),
-  price: z.number().min(1, "Price must be greater than 0"),
-  stock: z.number().int().min(0, "Stock must be 0 or greater"),
-  category_id: z.string().min(1, "Please select a category"),
+  name: z.string().min(3, "Minimal 3 karakter"),
+  slug: z.string().min(3, "Minimal 3 karakter"),
+  description: z.string().min(10, "Minimal 10 karakter"),
+  display_order: z.number().min(1, "Minimal 1"),
   image_url: z.string().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
-export default function ProductForm({
-  categories,
-  product,
+export default function CategoriesForm({
+  category,
 }: {
-  categories: Category[];
-  product?: Product;
+  category?: Categories;
 }) {
   const router = useRouter();
-  const isEdit = !!product;
+  const isEdit = !!category;
 
-  const [imageUrl, setImageUrl] = useState(product?.image_url || "");
+  const [imageUrl, setImageUrl] = useState(category?.image_url || "");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(
-    product?.image_url || null
+    category?.image_url || null
   );
   const [uploadingImage, setUploadingImage] = useState(false);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: product?.name || "",
-      slug: product?.slug || "",
-      description: product?.description || "",
-      price: product?.price || 0,
-      stock: product?.stock || 0,
-      category_id: product?.category_id || "",
-      image_url: product?.image_url || "",
+      name: category?.name || "",
+      slug: category?.slug || "",
+      description: category?.description || "",
+      display_order: category?.display_order || 0,
+      image_url: category?.image_url || "",
     },
   });
 
@@ -128,8 +111,8 @@ export default function ProductForm({
   async function onSubmit(values: FormValues) {
     try {
       // Validate image
-      if (!imageFile && !imageUrl && !product?.image_url) {
-        toast.error("Please upload a product image");
+      if (!imageFile && !imageUrl && !category?.image_url) {
+        toast.error("Please upload a category image");
         return;
       }
 
@@ -141,7 +124,7 @@ export default function ProductForm({
         const formData = new FormData();
         formData.append("file", imageFile);
 
-        const uploadResult = await uploadProductImage(formData);
+        const uploadResult = await uploadCategoryImage(formData);
         setUploadingImage(false);
 
         if (!uploadResult.success) {
@@ -150,9 +133,9 @@ export default function ProductForm({
         }
 
         finalImageUrl = uploadResult.url || "";
-      } else if (product?.image_url) {
+      } else if (category?.image_url) {
         // Keep existing image if editing and no new image
-        finalImageUrl = product.image_url;
+        finalImageUrl = category.image_url;
       }
 
       // Ensure we have an image URL
@@ -168,8 +151,9 @@ export default function ProductForm({
       };
 
       const result = isEdit
-        ? await updateProduct(product.id, dataToSubmit)
-        : await createProduct(dataToSubmit as any);
+        ? await updateCategory(category.id, dataToSubmit)
+        : // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          await createCategory(dataToSubmit as any);
 
       if (result.success) {
         toast.success(`Product ${isEdit ? "updated" : "created"} successfully`);
@@ -190,23 +174,23 @@ export default function ProductForm({
           {/* Image Upload */}
           <FieldGroup>
             <Field>
-              <FieldLabel>Product Image</FieldLabel>
+              <FieldLabel>Gambar Kategori</FieldLabel>
               <div className="space-y-4">
                 {/* Image Preview */}
                 {imagePreview ? (
-                  <div className="relative size-64 rounded-lg overflow-hidden bg-gray-100">
+                  <div className="relative size-64 rounded-full overflow-hidden">
                     <Image
-                      src={imagePreview}
-                      alt="Product preview"
+                      src={imagePreview || "https://placehold.co/200"}
+                      alt="Category Preview"
                       fill
-                      className="object-cover"
+                      className="object-cover bg-gray-100"
                     />
                     <button
                       type="button"
                       onClick={handleRemoveImage}
-                      className="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
+                      className="absolute top-2 right-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
                     >
-                      <X className="h-4 w-4" />
+                      <X className="size-4" />
                     </button>
                   </div>
                 ) : (
@@ -230,6 +214,7 @@ export default function ProductForm({
                   </label>
                 )}
 
+                {/* Image Upload */}
                 {uploadingImage && (
                   <div className="flex items-center gap-2 text-sm text-gray-600">
                     <Spinner />
@@ -240,12 +225,12 @@ export default function ProductForm({
             </Field>
           </FieldGroup>
 
-          {/* Product Name */}
+          {/* Category Name */}
           <FieldGroup>
             <Field>
-              <FieldLabel>Product Name *</FieldLabel>
+              <FieldLabel>Nama Kategori *</FieldLabel>
               <Input
-                placeholder="Enter product name"
+                placeholder="Masukkan Nama Kategori"
                 {...register("name")}
                 onBlur={generateSlug}
               />
@@ -253,93 +238,34 @@ export default function ProductForm({
             </Field>
           </FieldGroup>
 
-          {/* Slug */}
+          {/* Category Slug */}
           <FieldGroup>
             <Field>
-              <FieldLabel>Slug *</FieldLabel>
-              <Input placeholder="product-slug" {...register("slug")} />
+              <FieldLabel>Slug Kategori</FieldLabel>
+              <Input
+                placeholder="Masukkan Slug Kategori"
+                {...register("slug")}
+              />
               <FieldError>{formState.errors.slug?.message}</FieldError>
             </Field>
           </FieldGroup>
 
-          {/* Description */}
+          {/* Category Description */}
           <FieldGroup>
             <Field>
-              <FieldLabel>Description</FieldLabel>
-              <Textarea
-                placeholder="Product description"
-                rows={4}
+              <FieldLabel>Deskripsi Kategori</FieldLabel>
+              <Input
+                placeholder="Masukkan Deskripsi Kategori"
                 {...register("description")}
               />
               <FieldError>{formState.errors.description?.message}</FieldError>
             </Field>
           </FieldGroup>
 
-          {/* Price & Stock */}
-          <div className="grid grid-cols-2 gap-4">
-            <FieldGroup>
-              <Field>
-                <FieldLabel>Price *</FieldLabel>
-                <CurrencyInput
-                  placeholder="0"
-                  value={useWatch({ control: form.control, name: "price" })}
-                  onValueChange={(value) => setValue("price", value)}
-                />
-                <FieldError>{formState.errors.price?.message}</FieldError>
-              </Field>
-            </FieldGroup>
-
-            <FieldGroup>
-              <Field>
-                <FieldLabel>Stock *</FieldLabel>
-                <Input
-                  type="number"
-                  placeholder="0"
-                  {...register("stock", { valueAsNumber: true })}
-                />
-                <FieldError>{formState.errors.stock?.message}</FieldError>
-              </Field>
-            </FieldGroup>
-          </div>
-
-          {/* Category */}
-          <FieldGroup>
-            <Field>
-              <FieldLabel>Category</FieldLabel>
-              <Select
-                value={useWatch({ control: form.control, name: "category_id" })}
-                onValueChange={(value) => setValue("category_id", value)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select category" />
-                </SelectTrigger>
-                <SelectContent>
-                  {categories.map((category) => (
-                    <SelectItem key={category.id} value={category.id}>
-                      {category.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FieldError>{formState.errors.category_id?.message}</FieldError>
-            </Field>
-          </FieldGroup>
-
-          {/* Action Buttons */}
-          <div className="flex gap-4">
-            <Button
-              type="submit"
-              disabled={isSubmitting || uploadingImage}
-              className="flex-1"
-            >
-              {isSubmitting ? (
-                <>
-                  <Spinner className="mr-2" />
-                  Saving...
-                </>
-              ) : (
-                <>{isEdit ? "Update Product" : "Create Product"}</>
-              )}
+          {/* Submit Button */}
+          <div className="flex justify-end gap-4">
+            <Button type="submit" disabled={isSubmitting || uploadingImage}>
+              {isSubmitting ? <Spinner /> : isEdit ? "Update" : "Create"}
             </Button>
             <Button
               type="button"

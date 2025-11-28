@@ -4,7 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Database } from "@/lib/types";
-import Actions from "./actions";
+// import Actions from "./actions";
 
 type Customers = Database["public"]["Tables"]["profiles"]["Row"];
 
@@ -58,12 +58,17 @@ export const columns: ColumnDef<Customers>[] = [
     header: "Alamat",
   },
   {
-    id: "actions",
-    header: "Actions",
-    cell: ({ row }) => {
-      const product = row.original;
-
-      return <Actions product={product} row={row} />;
+    accessorKey: "role",
+    header: ({ column }) => {
+      return (
+        <div
+          className="flex cursor-pointer items-center"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Role
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </div>
+      );
     },
   },
 ];

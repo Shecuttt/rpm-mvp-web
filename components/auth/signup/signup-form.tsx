@@ -3,7 +3,7 @@
 
 import { signupSchema, SignupType } from "@/utils/zod/auth-schema";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createClient } from "@/utils/supabase/client";
@@ -25,8 +25,11 @@ export default function SignupForm({ redirectTo }: { redirectTo?: string }) {
   const supabase = createClient();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const toggleShowPassword = () => setShowPassword(!showPassword);
+  const toggleShowConfirmPassword = () =>
+    setShowConfirmPassword(!showConfirmPassword);
 
   const form = useForm<SignupType>({
     resolver: zodResolver(signupSchema),
@@ -143,13 +146,27 @@ export default function SignupForm({ redirectTo }: { redirectTo?: string }) {
                 <FieldLabel htmlFor="confirmPassword">
                   Confirm Password
                 </FieldLabel>
-                <Input
-                  type="password"
-                  id="confirmPassword"
-                  placeholder="Confirm your password"
-                  {...form.register("confirmPassword")}
-                  disabled={loading}
-                />
+                <div className="relative">
+                  <Input
+                    type={showConfirmPassword ? "text" : "password"}
+                    id="confirmPassword"
+                    placeholder="Confirm your password"
+                    {...form.register("confirmPassword")}
+                    disabled={loading}
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size={"icon-sm"}
+                    onClick={toggleShowConfirmPassword}
+                    aria-label={
+                      showConfirmPassword ? "Hide password" : "Show password"
+                    }
+                    className="absolute top-1/2 right-2 -translate-y-1/2"
+                  >
+                    {showConfirmPassword ? <Eye /> : <EyeClosed />}
+                  </Button>
+                </div>
                 {form.formState.errors.confirmPassword && (
                   <FieldError>
                     {form.formState.errors.confirmPassword.message}

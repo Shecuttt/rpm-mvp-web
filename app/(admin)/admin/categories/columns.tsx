@@ -1,25 +1,14 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreVertical } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
 import Image from "next/image";
 import SwitchActive from "./switch-active";
+import { Database } from "@/lib/types";
+import Actions from "./actions";
+import { ArrowUpDown } from "lucide-react";
 
-export type Categories = {
-  id: string;
-  name: string;
-  slug: string;
-  image_url: string | null;
-  is_active: boolean;
-};
+type Categories = Database["public"]["Tables"]["categories"]["Row"];
 
 export const columns: ColumnDef<Categories>[] = [
   {
@@ -92,31 +81,7 @@ export const columns: ColumnDef<Categories>[] = [
     cell: ({ row }) => {
       const product = row.original;
 
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <MoreVertical className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(product.id)}
-            >
-              Copy ID
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => console.log("edit", product.id)}>
-              Edit
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className="text-red-600"
-              onClick={() => console.log("delete", product.id)}
-            >
-              Delete
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
+      return <Actions category={product} row={row} />;
     },
   },
 ];
