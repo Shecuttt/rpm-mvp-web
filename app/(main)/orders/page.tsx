@@ -24,7 +24,7 @@ export default async function OrdersPage() {
   const orders = await getUserOrders();
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4">
+    <div className="min-h-screen py-12 md:pt-24 px-4">
       <div className="max-w-6xl mx-auto mt-12 md:mt-0">
         <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-8">
           Pesanan Saya

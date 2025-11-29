@@ -80,21 +80,21 @@ export default async function UserInfo() {
         <CardContent>
           <div className="space-y-2">
             <div>
-              <span className="text-gray-600">Nama:</span>
+              <span>Nama:</span>
               <p className="font-medium capitalize">
                 {profile?.name || "Belum diisi"}
               </p>
             </div>
             <div>
-              <span className="text-gray-600">Email:</span>
+              <span>Email:</span>
               <p className="font-medium">{user.email}</p>
             </div>
             <div>
-              <span className="text-gray-600">Alamat:</span>
+              <span>Alamat:</span>
               <p className="font-medium">{profile?.address || "Belum diisi"}</p>
             </div>
             <div>
-              <span className="text-gray-600">Nomor Telepon:</span>
+              <span>Nomor Telepon:</span>
               <p className="font-medium">{profile?.phone || "Belum diisi"}</p>
             </div>
           </div>

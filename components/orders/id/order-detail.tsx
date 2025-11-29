@@ -85,7 +85,7 @@ export default function OrderDetail({ order }: { order: OrderWithItems }) {
                         className="object-cover"
                       />
                     ) : (
-                      <div className="flex items-center justify-center w-full h-full text-gray-400">
+                      <div className="flex items-center justify-center w-full h-full text-muted-foreground">
                         <Package className="w-5 h-5" />
                       </div>
                     )}

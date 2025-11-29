@@ -7,7 +7,7 @@ export default async function CartCounter() {
 
   return (
     <Link href="/cart" className="relative">
-      <ShoppingCart className="h-5 w-5" />
+      <ShoppingCart className="h-5 w-5 dark:text-accent-foreground" />
       {count > 0 && (
         <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
           {count > 9 ? "9+" : count}

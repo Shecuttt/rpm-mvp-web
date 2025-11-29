@@ -4,11 +4,11 @@ import Image from "next/image";
 
 export default function Footer() {
   return (
-    <footer className="hidden md:block bg-black text-slate-300 mt-8 bottom-0 left-0">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <footer className="hidden md:block bg-neutral-900 text-neutral-50 bottom-0 left-0">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-4">
         <div className="grid grid-cols-1 md:grid-cols-6 gap-8 md:gap-10 mb-8">
           <div className="md:col-span-3">
-            <div className="text-white text-2xl font-bold mb-4 flex">
+            <div className="text-neutral-50 text-2xl font-bold mb-4 flex">
               <Image
                 src="/rpm-header.png"
                 width={30}
@@ -27,20 +27,26 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="text-white font-semibold mb-4">Services</h4>
+            <h4 className="text-neutral-50 font-semibold mb-4">Layanan</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="#" className="hover:text-white transition-colors">
-                  Coming Soon
+                <Link
+                  href="/terms-and-conditions"
+                  className="hover:text-neutral-50 transition-colors hover:underline"
+                >
+                  Syarat dan Ketentuan
                 </Link>
               </li>
             </ul>
           </div>
 
           <div className="md:col-span-2">
-            <h4 className="text-white font-semibold mb-4">Connect With Us</h4>
+            <h4 className="text-neutral-50 font-semibold mb-4">
+              Terhubung dengan Kami
+            </h4>
             <p className="text-sm mb-4">
-              Follow us on social media for updates and exclusive offers
+              Jangan ragu untuk menghubungi kami jika Anda memiliki pertanyaan
+              atau masalah. Kami siap membantu Anda.
             </p>
             <div className="flex space-x-4">
               <Link
@@ -65,7 +71,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-slate-800 pt-8 text-center text-sm">
+        <div className="text-center text-sm">
           <p>
             &copy; {new Date().getFullYear()} Ragil Putra Mandiri. All rights
             reserved.

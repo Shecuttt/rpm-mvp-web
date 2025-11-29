@@ -36,7 +36,7 @@ export default function ProductDetail({
 
   return (
     <div className="min-h-screen flex flex-col">
-      <main className="flex-1 mt-12 md:mt-0">
+      <main className="flex-1 pt-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
           <div className="mb-4">
             <BackButton />
@@ -44,7 +44,7 @@ export default function ProductDetail({
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 mb-12">
             {/* Product image */}
-            <div className="flex items-center justify-center bg-slate-100 rounded-lg overflow-hidden">
+            <div className="flex items-center justify-center rounded-lg overflow-hidden">
               <div className="relative w-full aspect-square">
                 <Image
                   src={product.image_url || "https://placehold.co/200"}
@@ -100,10 +100,7 @@ export default function ProductDetail({
                   {formatPrice(product.price)}
                 </p>
                 {product.stock > 0 ? (
-                  <p className="text-sm text-slate-600">
-                    {product.stock} item {/* {product.stock > 1 ? "s" : ""} */}
-                    tersedia
-                  </p>
+                  <p className="text-sm ">{product.stock} item tersedia</p>
                 ) : (
                   <p className="text-sm text-red-600">Tidak Tersedia</p>
                 )}
@@ -111,12 +108,10 @@ export default function ProductDetail({
 
               {product.description && (
                 <div>
-                  <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                  <h3 className="text-lg font-semibold mb-3">
                     Deskripsi Produk
                   </h3>
-                  <p className="text-slate-600 leading-relaxed">
-                    {product.description}
-                  </p>
+                  <p className=" leading-relaxed">{product.description}</p>
                 </div>
               )}
 
@@ -139,9 +134,7 @@ export default function ProductDetail({
                   )
                 ) : (
                   <div className="flex flex-col gap-3 w-full">
-                    <p className="text-sm text-slate-600">
-                      Login dulu buat lanjut.
-                    </p>
+                    <p className="text-sm ">Login dulu buat lanjut.</p>
                     <Link
                       href={`/login?redirect=${encodeURIComponent(pathname)}`}
                     >
@@ -150,24 +143,6 @@ export default function ProductDetail({
                   </div>
                 )}
               </div>
-
-              {/* Product highlights */}
-              {/* <Card className="bg-blue-50 border-blue-200 p-4">
-                <ul className="space-y-2 text-sm text-slate-700">
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-green-600 shrink-0" />
-                    Gratis Ongkir di seluruh Indonesia
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-green-600 shrink-0" />
-                    Pengiriman cepat
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-green-600 shrink-0" />
-                    Produk berkualitas
-                  </li>
-                </ul>
-              </Card> */}
             </div>
           </div>
 
@@ -178,7 +153,7 @@ export default function ProductDetail({
         </div>
 
         {/* sticky footer mobile */}
-        <footer className="sticky grid grid-cols-2 gap-3 bottom-0 md:hidden p-2 bg-gray-50 border">
+        <footer className="sticky grid grid-cols-2 gap-3 bottom-0 md:hidden p-2 border bg-accent">
           {user ? (
             product.stock ? (
               <>
@@ -192,9 +167,7 @@ export default function ProductDetail({
             )
           ) : (
             <div className="col-span-2 flex flex-col gap-2 p-2">
-              <p className="text-sm text-slate-600 text-center">
-                Login dulu buat lanjut.
-              </p>
+              <p className="text-sm  text-center">Login dulu buat lanjut.</p>
               <Link href={`/login?redirect=${encodeURIComponent(pathname)}`}>
                 <Button className="w-full">Login</Button>
               </Link>

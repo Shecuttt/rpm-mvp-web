@@ -28,12 +28,12 @@ export default function ScrollHideWrapper({
   }, [lastScroll]);
 
   return (
-    <div
-      className={`transition-transform duration-300 bg-accent backdrop-blur-md border-b ${
+    <nav
+      className={`fixed top-0 left-0 w-full z-50 transition-transform duration-300 ${
         hidden ? "-translate-y-full" : "translate-y-0"
       }`}
     >
       {children}
-    </div>
+    </nav>
   );
 }

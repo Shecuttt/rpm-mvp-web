@@ -13,9 +13,9 @@ export default async function CategorySection() {
   const hasMore = categories.length > limit;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 bg-gray-50">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 bg-gray-50 dark:bg-neutral-950 transition-colors">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl lg:text-2xl font-bold text-slate-900 capitalize">
+        <h2 className="text-xl lg:text-2xl font-bold text-slate-900 dark:text-neutral-100 capitalize">
           Belanja sesuai kategori
         </h2>
       </div>
@@ -28,7 +28,7 @@ export default async function CategorySection() {
               href={`/products?category=${category.slug}`}
               className="block"
             >
-              <Card className="group relative size-30 md:size-40 lg:size-60 shrink-0 overflow-hidden rounded-lg hover:shadow transition-all duration-300 p-0">
+              <Card className="group relative size-30 md:size-40 lg:size-60 shrink-0 overflow-hidden rounded-lg border border-neutral-200 dark:border-neutral-800 hover:shadow transition-all duration-300 p-0 bg-white dark:bg-neutral-900">
                 <Image
                   src={category.image_url || "https://placehold.co/200"}
                   alt={category.name}
@@ -48,8 +48,8 @@ export default async function CategorySection() {
 
           {hasMore && (
             <Link href="/categories">
-              <Card className="size-30 md:size-40 lg:size-60 shrink-0 flex items-center justify-center rounded-lg border hover:bg-slate-50 transition">
-                <span className="text-sm text-center font-semibold text-accent-foreground">
+              <Card className="size-30 md:size-40 lg:size-60 shrink-0 flex items-center justify-center rounded-lg border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition bg-white dark:bg-neutral-900">
+                <span className="text-sm text-center font-semibold text-neutral-700 dark:text-neutral-300">
                   Lihat lainnya
                 </span>
               </Card>

@@ -17,7 +17,9 @@ export default function FeaturedList({ products }: { products: Product[] }) {
   if (!products.length) {
     return (
       <div className="text-center py-12">
-        <p className="text-slate-600 text-lg">No products found.</p>
+        <p className="text-slate-600 dark:text-slate-300 text-lg">
+          No products found.
+        </p>
       </div>
     );
   }
@@ -52,10 +54,10 @@ export default function FeaturedList({ products }: { products: Product[] }) {
             </div>
 
             <div className="p-4 space-y-3 right-0 bottom-0 w-full">
-              <h3 className="text-sm md:text-base font-semibold line-clamp-2 mb-2 capitalize">
+              <h3 className="text-sm md:text-base font-semibold line-clamp-1 mb-2 capitalize">
                 {product.name}
               </h3>
-              <p className="text-sm text-slate-800">
+              <p className="text-sm text-neutral-900 dark:text-neutral-100">
                 {formatPrice(product.price)}
               </p>
             </div>

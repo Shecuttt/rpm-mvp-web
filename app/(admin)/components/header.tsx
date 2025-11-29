@@ -24,7 +24,7 @@ export default function AdminHeader({
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-white border-b border-gray-200">
+    <header className="sticky top-0 z-40 border-b bg-background/50 backdrop-blur-lg">
       <div className="flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex ml-auto items-center gap-4">
           {/* Notifications */}

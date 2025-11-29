@@ -3,7 +3,7 @@ import ProductsSkeleton from "@/components/skeletons/products-skeleton";
 
 export default function Loading() {
   return (
-    <section className="container mx-auto py-8">
+    <section className="container mx-auto py-12 md:pt-24">
       <PageNameSkeleton />
       <ProductsSkeleton />
     </section>

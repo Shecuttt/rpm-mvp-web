@@ -1,17 +1,17 @@
 import CategorySection from "@/components/home/category-section";
 import FeaturedProducts from "@/components/home/featured-products";
-// import Slider from "@/components/home/slider";
-import ProductsSkeleton from "@/components/skeletons/products-skeleton";
-import { Suspense } from "react";
+import FeaturesSection from "@/components/home/features-section";
+import HeroSection from "@/components/home/hero-section";
+import StatsSection from "@/components/home/stats-section";
 
 export default function Home() {
   return (
     <>
-      {/* <Slider /> */}
-      <Suspense fallback={<ProductsSkeleton />}>
-        <FeaturedProducts />
-      </Suspense>
+      <HeroSection />
       <CategorySection />
+      <FeaturedProducts />
+      <FeaturesSection />
+      <StatsSection />
     </>
   );
 }

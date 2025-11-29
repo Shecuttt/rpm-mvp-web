@@ -25,7 +25,7 @@ export default async function AdminDashboard() {
     .from("order")
     .select("created_at, total, status")
     .gte("created_at", sevenDaysAgo.toISOString())
-    .order("created_at", { ascending: true });
+    .order("created_at", { ascending: false });
 
   // Get total revenue (delivered orders only)
   const { data: deliveredOrders } = await supabase
@@ -139,7 +139,7 @@ export default async function AdminDashboard() {
       </div>
 
       {/* Recent Orders Table */}
-      <div className="bg-white rounded-lg shadow-md p-6">
+      <div className="rounded-lg shadow-md p-6">
         <h2 className="text-xl font-bold mb-4">Recent Orders</h2>
         <div className="space-y-3">
           {recentOrders?.slice(0, 5).map((order) => (

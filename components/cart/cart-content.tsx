@@ -140,7 +140,7 @@ export default function CartContent({
     <div className="grid lg:grid-cols-3 gap-8">
       <div className="lg:col-span-2 space-y-4 relative px-4">
         {/* Select All Header */}
-        <div className="bg-white rounded-lg shadow-md p-4 flex items-center gap-3">
+        <div className="bg-white dark:bg-neutral-900 dark:border rounded-lg shadow-md p-4 flex items-center gap-3">
           <Checkbox checked={allSelected} onCheckedChange={handleToggleAll} />
           <span className="font-medium">
             {allSelected
@@ -269,7 +269,7 @@ export default function CartContent({
       </div>
 
       {/* Order Summary */}
-      <div className="hidden md:block lg:col-span-1">
+      <div className="lg:col-span-1 px-4">
         <Card className="sticky top-4">
           <CardHeader>
             <CardTitle>Ringkasan Pesanan</CardTitle>
@@ -308,25 +308,6 @@ export default function CartContent({
           </CardContent>
         </Card>
       </div>
-
-      {/* Order Summary Mobile */}
-      <footer className="sticky bottom-0 left-0 md:hidden bg-accent border-t flex flex-col gap-4 px-4 py-2 z-10">
-        <div className="flex justify-between">
-          <span className="text-muted-foreground">Sub total</span>
-          <span className="font-medium">{formatPrice(subtotal)}</span>
-        </div>
-        <Separator />
-
-        {selectedItems.length > 0 ? (
-          <Button asChild className="w-full mt-4">
-            <Link href={`/checkout`}>{loading ? <Spinner /> : "Checkout"}</Link>
-          </Button>
-        ) : (
-          <Button disabled className="w-full mt-4">
-            Pilih dulu la
-          </Button>
-        )}
-      </footer>
     </div>
   );
 }

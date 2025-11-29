@@ -17,23 +17,32 @@ export default function StatsCard({
   trendUp,
 }: StatsCardProps) {
   return (
-    <Card className="p-6">
+    <Card className="p-6 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-gray-600">{title}</p>
-          <p className="text-2xl font-bold text-gray-900 mt-2">{value}</p>
+          <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
+            {title}
+          </p>
+
+          <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-50 mt-2">
+            {value}
+          </p>
+
           {trend && (
             <p
               className={`text-sm mt-2 ${
-                trendUp ? "text-green-600" : "text-red-600"
+                trendUp
+                  ? "text-neutral-700 dark:text-neutral-300"
+                  : "text-neutral-500 dark:text-neutral-500"
               }`}
             >
               {trend} from last month
             </p>
           )}
         </div>
-        <div className="rounded-full bg-blue-100 p-3">
-          <Icon className="h-6 w-6 text-blue-600" />
+
+        <div className="rounded-full bg-neutral-200 dark:bg-neutral-800 p-3">
+          <Icon className="h-6 w-6 text-neutral-700 dark:text-neutral-300" />
         </div>
       </div>
     </Card>

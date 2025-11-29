@@ -144,6 +144,7 @@ export default function CheckoutForm({
         });
         router.push(`/checkout/success?orderId=${result.orderId}`);
       } else {
+        console.error("Order gagal:", result);
         toast.error(result?.error || "Failed to create order", {
           position: "top-center",
         });

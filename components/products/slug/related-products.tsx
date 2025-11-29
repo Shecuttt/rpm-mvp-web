@@ -24,8 +24,8 @@ export function RelatedProducts({ products }: RelatedProductsProps) {
   if (!products.length) return null;
 
   return (
-    <div className="pb-4 md:pb-0">
-      <h2 className="text-2xl font-bold text-slate-900 mb-6">Produk Terkait</h2>
+    <div className="pb-4 md:pb-8">
+      <h2 className="text-2xl font-bold mb-6">Produk Terkait</h2>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
         {products.map((product) => (
           <Link
@@ -33,7 +33,7 @@ export function RelatedProducts({ products }: RelatedProductsProps) {
             href={`/products/${product.slug || product.id}`}
           >
             <Card className="group overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer h-full p-0">
-              <div className="relative aspect-square overflow-hidden bg-slate-100">
+              <div className="relative aspect-square overflow-hidden">
                 <Image
                   src={product.image_url || "https://placehold.co/20"}
                   alt={product.name}
@@ -44,10 +44,10 @@ export function RelatedProducts({ products }: RelatedProductsProps) {
                 />
               </div>
               <div className="p-4">
-                <h3 className="font-semibold text-slate-900 line-clamp-1 mb-2">
+                <h3 className="font-semibold line-clamp-1 mb-2">
                   {product.name}
                 </h3>
-                <p className="text-lg font-bold text-slate-900">
+                <p className="text-lg font-bold">
                   {formatPrice(product.price)}
                 </p>
               </div>

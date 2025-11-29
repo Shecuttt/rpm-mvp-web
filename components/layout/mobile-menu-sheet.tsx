@@ -13,6 +13,7 @@ import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { createClient } from "@/utils/supabase/server";
 import { getProfileById } from "@/lib/action/profile";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import ThemeToggle from "./theme-toggle";
 
 // MAIN COMPONENT
 export default function MobileMenuSheet() {
@@ -25,8 +26,10 @@ export default function MobileMenuSheet() {
       </SheetTrigger>
 
       <SheetContent className="w-64 px-6" side="left">
+        <SheetTitle className="mt-2">
+          <ThemeToggle />
+        </SheetTitle>
         <VisuallyHidden>
-          <SheetTitle>Navigation Menu</SheetTitle>
           <SheetDescription>Menu navigasi aplikasi</SheetDescription>
         </VisuallyHidden>
 
@@ -122,7 +125,7 @@ async function OrderAndAccountSection() {
       <SheetClose asChild>
         <Link
           href="/account"
-          className="w-full mt-auto flex items-center gap-3 p-3 rounded-xl bg-slate-100 hover:bg-slate-200 transition"
+          className="w-full mt-auto flex items-center gap-3 p-3 rounded-xl bg-secondary transition"
         >
           <Avatar className="h-10 w-10">
             <AvatarImage src={profile?.avatar_url || ""} alt={name} />
@@ -135,7 +138,7 @@ async function OrderAndAccountSection() {
           <div className="flex flex-col overflow-hidden">
             <p className="text-sm font-medium truncate capitalize">{name}</p>
             {email && (
-              <p className="text-xs text-slate-600 truncate">{email}</p>
+              <p className="text-xs text-muted-foreground truncate">{email}</p>
             )}
           </div>
         </Link>
