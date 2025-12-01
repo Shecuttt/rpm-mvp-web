@@ -10,16 +10,16 @@ export default async function StatsSection() {
   ]);
 
   const stats = [
-    { label: "Products", value: (productsCount.count || 0).toLocaleString() },
+    { label: "Produk", value: (productsCount.count || 0).toLocaleString() },
     {
-      label: "Happy Customers",
+      label: "Pelanggan Puas",
       value: (usersCount.count || 0).toLocaleString(),
     },
     {
-      label: "Orders Completed",
+      label: "Pesanan Selesai",
       value: (ordersCount.count || 0).toLocaleString(),
     },
-    { label: "Years in Business", value: "0+" },
+    { label: "Tahun Beroperasi", value: "0+" },
   ];
 
   return (
@@ -35,10 +35,11 @@ export default async function StatsSection() {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Trusted by Thousands
+            Dipercaya oleh Ribuan Pelanggan
           </h2>
           <p className="text-neutral-600 dark:text-neutral-400 text-lg">
-            Join our growing community of satisfied customers
+            Bergabunglah dengan komunitas pelanggan puas kami yang terus
+            berkembang
           </p>
         </div>
 

@@ -3,23 +3,23 @@ import { Truck, ShieldCheck, Headphones, CreditCard } from "lucide-react";
 const features = [
   {
     icon: Truck,
-    title: "Free Shipping",
-    description: "On orders over Rp 500.000",
+    title: "Gratis Ongkir",
+    description: "Untuk pesanan di atas Rp 500.000",
   },
   {
     icon: ShieldCheck,
-    title: "Secure Payment",
-    description: "Your payment is 100% secure",
+    title: "Pembayaran Aman",
+    description: "Pembayaran Anda 100% aman",
   },
   {
     icon: Headphones,
     title: "24/7 Support",
-    description: "We're here to help anytime",
+    description: "Kami siap membantu kapan saja",
   },
   {
     icon: CreditCard,
-    title: "Easy Returns",
-    description: "30-day return policy",
+    title: "Pengembalian Mudah",
+    description: "Kebijakan pengembalian 30 hari",
   },
 ];
 

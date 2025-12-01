@@ -45,8 +45,8 @@ export default async function ProductsPage({
   return (
     <div className="min-h-screen flex flex-col">
       <main className="flex-1">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:pt-24">
-          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 pt-24">
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6">
             {searchQuery
               ? `Hasil pencarian untuk "${searchQuery}"`
               : selectedCategory
