@@ -25,10 +25,10 @@ export default function SuccessPage() {
         <EmptyContent>
           <div className="flex gap-4">
             <Link href={"/orders"}>
-              <Button>Lihat Order</Button>
+              <Button>Lihat Pesanan</Button>
             </Link>
             <Link href={"/products"}>
-              <Button>Lanjut Shopping</Button>
+              <Button>Lanjut Belanja</Button>
             </Link>
           </div>
         </EmptyContent>

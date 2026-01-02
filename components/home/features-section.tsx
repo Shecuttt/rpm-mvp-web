@@ -25,8 +25,15 @@ const features = [
 
 export default function FeaturesSection() {
   return (
-    <section className="py-16 px-4 bg-gray-50 dark:bg-neutral-950">
-      <div className="max-w-7xl mx-auto">
+    <section className="relative overflow-hidden py-16 px-4 bg-neutral-50 dark:bg-neutral-950">
+      {/* Grid Background */}
+      <div className="absolute inset-0 bg-grid-black/[0.04] dark:bg-grid-white/[0.03] bg-size-[20px_20px]" />
+
+      {/* Modern Decorations (Blobs) */}
+      <div className="absolute -top-20 -left-20 w-72 h-72 bg-emerald-500/30 rounded-full blur-3xl opacity-50 dark:opacity-20 animate-pulse delay-200 pointer-events-none" />
+      <div className="absolute bottom-0 -right-20 w-96 h-96 bg-yellow-500/30 rounded-full blur-3xl opacity-50 dark:opacity-20 animate-pulse delay-700 pointer-events-none" />
+
+      <div className="relative z-10 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {features.map((feature) => {
             const Icon = feature.icon;

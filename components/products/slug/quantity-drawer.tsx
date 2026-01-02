@@ -50,9 +50,8 @@ export default function QuantityDrawer({ product, mode }: QuantityDrawerProps) {
         }
       }
     } else if (mode === "buy") {
-      const checkoutUrl = `/checkout/buy-now?productId=${
-        product.id
-      }&quantity=${quantity}&redirect=${encodeURIComponent(pathname)}`;
+      const checkoutUrl = `/checkout/buy-now?productId=${product.id
+        }&quantity=${quantity}&redirect=${encodeURIComponent(pathname)}`;
       router.push(checkoutUrl);
     }
 
@@ -92,7 +91,7 @@ export default function QuantityDrawer({ product, mode }: QuantityDrawerProps) {
           </DrawerDescription>
 
           <div className="flex items-center justify-between">
-            <Label className="text-sm font-medium">Quantity</Label>
+            <Label className="text-sm font-medium">Jumlah</Label>
             <div className="flex items-center border border-gray-300 rounded-lg">
               <Button
                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
@@ -129,8 +128,8 @@ export default function QuantityDrawer({ product, mode }: QuantityDrawerProps) {
                 ? "Adding..."
                 : "Processing..."
               : mode === "cart"
-              ? "Confirm Add to Cart"
-              : "Proceed to Checkout"}
+                ? "Tambahkan ke Keranjang"
+                : "Beli Sekarang"}
           </Button>
         </div>
       </DrawerContent>

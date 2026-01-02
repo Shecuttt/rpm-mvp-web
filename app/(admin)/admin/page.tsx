@@ -6,95 +6,35 @@ import {
 } from "@/app/(admin)/components/analytics-charts";
 import { Package, ShoppingCart, Users, DollarSign } from "lucide-react";
 import PageName from "../components/page-name";
+import {
+  getAdminStats,
+  getOrdersByStatus,
+  getRevenueData,
+} from "@/utils/supabase/cached-queries";
 
 export default async function AdminDashboard() {
   const supabase = await createClient();
 
-  // Fetch stats
-  const [productsCount, ordersCount, usersCount] = await Promise.all([
-    supabase.from("product").select("*", { count: "exact", head: true }),
-    supabase.from("order").select("*", { count: "exact", head: true }),
-    supabase.from("profile").select("*", { count: "exact", head: true }),
+  // Fetch cached stats
+  const [stats, revenueInfo, ordersData] = await Promise.all([
+    getAdminStats(),
+    getRevenueData(),
+    getOrdersByStatus(),
   ]);
 
-  // Get orders for revenue chart (last 7 days)
+  const { productsCount, ordersCount, usersCount } = stats;
+  const { revenueData, totalRevenue } = revenueInfo;
+
+  // Get recent orders (keep this dynamic/real-time for now)
   const sevenDaysAgo = new Date();
   sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
   const { data: recentOrders } = await supabase
     .from("order")
-    .select("created_at, total, status")
+    .select("total, status, created_at")
     .gte("created_at", sevenDaysAgo.toISOString())
-    .order("created_at", { ascending: false });
-
-  // Get total revenue (delivered orders only)
-  const { data: deliveredOrders } = await supabase
-    .from("order")
-    .select("total")
-    .eq("status", "delivered");
-
-  const totalRevenue =
-    deliveredOrders?.reduce((sum, order) => sum + order.total, 0) || 0;
-
-  // Prepare revenue data (group by day)
-  const revenueByDay = new Map<string, number>();
-
-  // Initialize last 7 days with 0
-  for (let i = 6; i >= 0; i--) {
-    const date = new Date();
-    date.setDate(date.getDate() - i);
-    const dateKey = date.toLocaleDateString("id-ID", {
-      month: "short",
-      day: "numeric",
-    });
-    revenueByDay.set(dateKey, 0);
-  }
-
-  // Aggregate revenue per day
-  recentOrders?.forEach((order) => {
-    if (order.status === "delivered" || order.status === "shipped") {
-      const date = new Date(order.created_at);
-      const dateKey = date.toLocaleDateString("id-ID", {
-        month: "short",
-        day: "numeric",
-      });
-      const currentRevenue = revenueByDay.get(dateKey) || 0;
-      revenueByDay.set(dateKey, currentRevenue + order.total);
-    }
-  });
-
-  // Convert to chart format
-  const revenueData = Array.from(revenueByDay.entries()).map(
-    ([name, value]) => ({
-      name,
-      value: Math.round(value),
-    })
-  );
-
-  // Prepare orders by status data
-  const ordersByStatus = new Map<string, number>([
-    ["Pending", 0],
-    ["Processing", 0],
-    ["Shipped", 0],
-    ["Delivered", 0],
-    ["Cancelled", 0],
-  ]);
-
-  const { data: allOrders } = await supabase.from("order").select("status");
-
-  allOrders?.forEach((order) => {
-    const statusLabel =
-      order.status.charAt(0).toUpperCase() + order.status.slice(1);
-    const currentCount = ordersByStatus.get(statusLabel) || 0;
-    ordersByStatus.set(statusLabel, currentCount + 1);
-  });
-
-  const ordersData = Array.from(ordersByStatus.entries()).map(
-    ([name, value]) => ({
-      name,
-      value,
-    })
-  );
+    .order("created_at", { ascending: false })
+    .limit(5);
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("id-ID", {
@@ -112,19 +52,15 @@ export default async function AdminDashboard() {
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         <StatsCard
           title="Total Products"
-          value={productsCount.count || 0}
+          value={productsCount}
           icon={Package}
         />
         <StatsCard
           title="Total Orders"
-          value={ordersCount.count || 0}
+          value={ordersCount}
           icon={ShoppingCart}
         />
-        <StatsCard
-          title="Total Users"
-          value={usersCount.count || 0}
-          icon={Users}
-        />
+        <StatsCard title="Total Users" value={usersCount} icon={Users} />
         <StatsCard
           title="Total Revenue"
           value={formatCurrency(totalRevenue)}
@@ -142,7 +78,7 @@ export default async function AdminDashboard() {
       <div className="rounded-lg shadow-md p-6">
         <h2 className="text-xl font-bold mb-4">Recent Orders</h2>
         <div className="space-y-3">
-          {recentOrders?.slice(0, 5).map((order) => (
+          {recentOrders?.map((order) => (
             <div
               key={order.created_at}
               className="flex items-center justify-between p-3 border rounded-lg"
@@ -162,15 +98,14 @@ export default async function AdminDashboard() {
                 </p>
               </div>
               <span
-                className={`px-3 py-1 rounded-full text-xs font-medium ${
-                  order.status === "delivered"
+                className={`px-3 py-1 rounded-full text-xs font-medium ${order.status === "delivered"
                     ? "bg-green-100 text-green-800"
                     : order.status === "pending"
-                    ? "bg-yellow-100 text-yellow-800"
-                    : order.status === "cancelled"
-                    ? "bg-red-100 text-red-800"
-                    : "bg-blue-100 text-blue-800"
-                }`}
+                      ? "bg-yellow-100 text-yellow-800"
+                      : order.status === "cancelled"
+                        ? "bg-red-100 text-red-800"
+                        : "bg-blue-100 text-blue-800"
+                  }`}
               >
                 {order.status}
               </span>

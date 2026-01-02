@@ -29,10 +29,10 @@ export default function AdminSidebar() {
   return (
     <>
       {/* Mobile sidebar backdrop */}
-      <div className="lg:hidden fixed inset-0 z-40 bg-gray-600/75" />
+      <div className="lg:hidden fixed inset-0 z-40 bg-neutral-600/75" />
 
       {/* Sidebar */}
-      <div className="fixed inset-y-0 left-0 z-50 w-64 lg:block bg-gray-50 dark:bg-gray-900">
+      <div className="fixed inset-y-0 left-0 z-50 w-64 lg:block bg-neutral-50 dark:bg-neutral-900">
         <div className="flex h-full flex-col">
           {/* Logo */}
           <div className="flex h-16 items-center justify-between px-6 bg-secondary border-b border-secondary-foreground">
@@ -57,7 +57,7 @@ export default function AdminSidebar() {
                     "group flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors",
                     isActive
                       ? "bg-primary text-accent"
-                      : "text-foreground hover:bg-primary hover:text-accent"
+                      : "text-foreground hover:bg-primary/20"
                   )}
                 >
                   <item.icon
@@ -65,7 +65,7 @@ export default function AdminSidebar() {
                       "mr-3 h-5 w-5 shrink-0",
                       isActive
                         ? "text-accent"
-                        : "text-secondary-foreground group-hover:text-accent"
+                        : "text-secondary-foreground"
                     )}
                   />
                   {item.name}
@@ -78,7 +78,7 @@ export default function AdminSidebar() {
           <div className="border-t border-primary/10 p-4">
             <Link
               href="/"
-              className="flex items-center px-3 py-2 text-sm font-medium text-accent-foreground hover:bg-gray-200 rounded-md transition-colors"
+              className="flex items-center px-3 py-2 text-sm font-medium text-accent-foreground hover:bg-neutral-200/40 rounded-md transition-colors"
             >
               <LogOut className="mr-3 h-5 w-5 text-accent-foreground" />
               Back to Store

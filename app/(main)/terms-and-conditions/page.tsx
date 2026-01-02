@@ -3,13 +3,11 @@ import { Card, CardContent } from "@/components/ui/card";
 
 export default function TermsAndConditions() {
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4">
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900 pt-24 pb-12 px-4">
       <div className="max-w-4xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
-            Syarat dan Ketentuan
-          </h1>
-          <p className="text-gray-600">
+          <h1 className="text-4xl font-bold mb-2">Syarat dan Ketentuan</h1>
+          <p className="text-neutral-600 dark:text-neutral-400">
             Terakhir diperbarui:{" "}
             {new Date().toLocaleDateString("id-ID", {
               year: "numeric",
@@ -23,10 +21,10 @@ export default function TermsAndConditions() {
           <CardContent className="p-8 space-y-8">
             {/* Section 1 */}
             <section>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl font-bold text-neutral-900 dark:text-neutral-50 mb-4">
                 1. Penerimaan Ketentuan
               </h2>
-              <p className="text-gray-700 leading-relaxed">
+              <p className="text-neutral-700 dark:text-neutral-100 leading-relaxed">
                 Dengan mengakses dan menggunakan platform e-commerce ini, Anda
                 menyetujui untuk terikat oleh syarat dan ketentuan yang berlaku.
                 Jika Anda tidak setuju dengan salah satu bagian dari ketentuan
@@ -36,10 +34,10 @@ export default function TermsAndConditions() {
 
             {/* Section 2 */}
             <section>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl font-bold text-neutral-900 dark:text-neutral-50 mb-4">
                 2. Pendaftaran Akun
               </h2>
-              <div className="space-y-3 text-gray-700 leading-relaxed">
+              <div className="space-y-3 text-neutral-700 dark:text-neutral-100 leading-relaxed">
                 <p>
                   Untuk menggunakan layanan tertentu, Anda harus membuat akun
                   dengan memberikan informasi yang akurat dan lengkap.
@@ -62,10 +60,10 @@ export default function TermsAndConditions() {
 
             {/* Section 3 */}
             <section>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl font-bold text-neutral-900 dark:text-neutral-50 mb-4">
                 3. Pemesanan dan Pembayaran
               </h2>
-              <div className="space-y-3 text-gray-700 leading-relaxed">
+              <div className="space-y-3 text-neutral-700 dark:text-neutral-100 leading-relaxed">
                 <p>Dengan melakukan pemesanan, Anda menyatakan bahwa:</p>
                 <ul className="list-disc list-inside space-y-2 ml-4">
                   <li>
@@ -85,10 +83,10 @@ export default function TermsAndConditions() {
 
             {/* Section 4 */}
             <section>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl font-bold text-neutral-900 dark:text-neutral-50 mb-4">
                 4. Pengiriman
               </h2>
-              <div className="space-y-3 text-gray-700 leading-relaxed">
+              <div className="space-y-3 text-neutral-700 dark:text-neutral-100 leading-relaxed">
                 <p>Ketentuan pengiriman:</p>
                 <ul className="list-disc list-inside space-y-2 ml-4">
                   <li>
@@ -108,10 +106,10 @@ export default function TermsAndConditions() {
 
             {/* Section 5 */}
             <section>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl font-bold text-neutral-900 dark:text-neutral-50 mb-4">
                 5. Kebijakan Pengembalian
               </h2>
-              <div className="space-y-3 text-gray-700 leading-relaxed">
+              <div className="space-y-3 text-neutral-700 dark:text-neutral-100 leading-relaxed">
                 <p>
                   Anda dapat mengembalikan produk dalam waktu 30 hari sejak
                   penerimaan dengan ketentuan:
@@ -131,10 +129,10 @@ export default function TermsAndConditions() {
 
             {/* Section 6 */}
             <section>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl font-bold text-neutral-900 dark:text-neutral-50 mb-4">
                 6. Hak Kekayaan Intelektual
               </h2>
-              <p className="text-gray-700 leading-relaxed">
+              <p className="text-neutral-700 dark:text-neutral-100 leading-relaxed">
                 Seluruh konten di platform ini, termasuk teks, grafis, logo,
                 gambar, dan perangkat lunak adalah milik kami atau pemberi
                 lisensi kami dan dilindungi oleh undang-undang hak cipta. Anda
@@ -145,10 +143,10 @@ export default function TermsAndConditions() {
 
             {/* Section 7 */}
             <section>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl font-bold text-neutral-900 dark:text-neutral-50 mb-4">
                 7. Privasi Data
               </h2>
-              <p className="text-gray-700 leading-relaxed">
+              <p className="text-neutral-700 dark:text-neutral-100 leading-relaxed">
                 Kami menghormati privasi Anda dan berkomitmen untuk melindungi
                 data pribadi Anda. Informasi yang kami kumpulkan digunakan untuk
                 memproses pesanan, meningkatkan layanan, dan komunikasi terkait
@@ -159,10 +157,10 @@ export default function TermsAndConditions() {
 
             {/* Section 8 */}
             <section>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl font-bold text-neutral-900 dark:text-neutral-50 mb-4">
                 8. Pembatasan Tanggung Jawab
               </h2>
-              <div className="space-y-3 text-gray-700 leading-relaxed">
+              <div className="space-y-3 text-neutral-700 dark:text-neutral-100 leading-relaxed">
                 <p>Kami tidak bertanggung jawab atas:</p>
                 <ul className="list-disc list-inside space-y-2 ml-4">
                   <li>Kerugian tidak langsung atau konsekuensial</li>
@@ -178,10 +176,10 @@ export default function TermsAndConditions() {
 
             {/* Section 9 */}
             <section>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl font-bold text-neutral-900 dark:text-neutral-50 mb-4">
                 9. Perilaku Pengguna
               </h2>
-              <div className="space-y-3 text-gray-700 leading-relaxed">
+              <div className="space-y-3 text-neutral-700 dark:text-neutral-100 leading-relaxed">
                 <p>Anda setuju untuk tidak:</p>
                 <ul className="list-disc list-inside space-y-2 ml-4">
                   <li>Menggunakan platform untuk aktivitas ilegal</li>
@@ -197,10 +195,10 @@ export default function TermsAndConditions() {
 
             {/* Section 10 */}
             <section>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl font-bold text-neutral-900 dark:text-neutral-50 mb-4">
                 10. Perubahan Ketentuan
               </h2>
-              <p className="text-gray-700 leading-relaxed">
+              <p className="text-neutral-700 dark:text-neutral-100 leading-relaxed">
                 Kami berhak untuk mengubah syarat dan ketentuan ini
                 sewaktu-waktu. Perubahan akan berlaku segera setelah
                 dipublikasikan di platform. Penggunaan berkelanjutan atas
@@ -211,10 +209,10 @@ export default function TermsAndConditions() {
 
             {/* Section 11 */}
             <section>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl font-bold text-neutral-900 dark:text-neutral-50 mb-4">
                 11. Hukum yang Berlaku
               </h2>
-              <p className="text-gray-700 leading-relaxed">
+              <p className="text-neutral-700 dark:text-neutral-100 leading-relaxed">
                 Syarat dan ketentuan ini diatur oleh dan ditafsirkan sesuai
                 dengan hukum Republik Indonesia. Setiap sengketa yang timbul
                 akan diselesaikan di pengadilan yang berwenang di Indonesia.
@@ -223,17 +221,17 @@ export default function TermsAndConditions() {
 
             {/* Section 12 */}
             <section>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl font-bold text-neutral-900 dark:text-neutral-50 mb-4">
                 12. Hubungi Kami
               </h2>
-              <div className="space-y-3 text-gray-700 leading-relaxed">
+              <div className="space-y-3 text-neutral-700 dark:text-neutral-100 leading-relaxed">
                 <p>
                   Jika Anda memiliki pertanyaan tentang syarat dan ketentuan
                   ini, silakan hubungi kami:
                 </p>
-                <div className="bg-gray-50 p-4 rounded-lg space-y-2">
+                <div className="p-4 rounded-lg space-y-2">
                   <p>
-                    <strong>Email:</strong> zaidhusni93@gmail.com
+                    <strong>Email:</strong> rpmdotcom@gmail.com
                   </p>
                   {/* <p>
                     <strong>Telepon:</strong> +62 21 1234 5678
@@ -247,8 +245,8 @@ export default function TermsAndConditions() {
             </section>
 
             {/* Footer */}
-            <div className="pt-6 border-t border-gray-200">
-              <p className="text-sm text-gray-500 text-center">
+            <div className="pt-6 border-t border-neutral-200">
+              <p className="text-sm text-neutral-500 text-center">
                 Dengan menggunakan platform ini, Anda menyatakan telah membaca,
                 memahami, dan menyetujui seluruh syarat dan ketentuan yang
                 berlaku.

@@ -7,7 +7,7 @@ import { Suspense } from "react";
 import OrderListSkeleton from "@/components/skeletons/order-list-skeleton";
 
 export const metadata: Metadata = {
-  title: "My Orders | RPM - Ragil Putra Mandiri",
+  title: "Pesanan Saya | RPM - Ragil Putra Mandiri",
   description: "Platform e-commerce terpercaya di Indonesia",
 };
 
